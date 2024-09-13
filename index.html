@@ -33,14 +33,14 @@
         let birdX = 50;
         let birdY = canvas.height / 2;
         let birdSize = 40;
-        let gravity = 0.6;
-        let birdSpeed = 0;
+        let gravity = 0.6;  // Гравитация для падения птицы
+        let birdSpeed = 0;  // Скорость движения птицы по вертикали
         let isGameOver = false;
         let score = 0;
         let pipes = [];
         let pipeWidth = 80;
-        let pipeGap = 200;  // Расстояние между верхней и нижней трубами
-        let pipeSpeed = 3;  // Скорость движения труб
+        let pipeGap = 200;  // Зазор между верхней и нижней трубами
+        let pipeSpeed = 3;  // Скорость движения труб (по горизонтали)
 
         // Загрузка изображений
         const birdImg = new Image();
