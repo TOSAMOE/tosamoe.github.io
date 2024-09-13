@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird</title>
+    <title>Flappy Bird - Paper Plane Physics</title>
     <style>
         body {
             margin: 0;
@@ -35,9 +35,14 @@
         // Параметры птицы
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 100; // Размер птицы
-        let gravity = 1.5;
+        let birdSize = 40; // Размер птицы
+        let gravity = 0.4; // Уменьшенная гравитация для более плавного движения
         let birdSpeed = 0;
+        let lift = -8; // Сила подъёма, чтобы самолётик плавно взлетал
+        let drag = 0.98; // Добавляем трение для замедления движения
+        let angle = 0; // Угол наклона самолёта
+        let maxAngle = 25; // Максимальный наклон в градусах
+        let rotationSpeed = 0.05; // Скорость изменения наклона
         let isGameOver = false;
         let score = 0;
         let pipes = [];
@@ -47,7 +52,7 @@
 
         // Загрузка изображения для птицы
         const birdImg = new Image();
-        birdImg.src = 'assets/camoletik.png'; // Собственная моделька птицы
+        birdImg.src = 'assets/camoletik.png'; // Собственная моделька самолётика
 
         // Добавление труб
         function addPipe() {
@@ -63,7 +68,7 @@
         // Обработка нажатий клавиш, кликов мыши и касаний экрана
         function flap() {
             if (!isGameOver) {
-                birdSpeed = -10; // Прыжок птицы
+                birdSpeed = lift; // Взлёт
             } else {
                 restartGame(); // Перезапуск игры
             }
@@ -89,8 +94,14 @@
 
         // Обновление состояния игры
         function updateGame() {
+            // Анимация движения птицы (бумажный самолётик)
             birdSpeed += gravity;
+            birdSpeed *= drag; // Добавляем трение
             birdY += birdSpeed;
+
+            // Ограничение наклона в пределах [-maxAngle, maxAngle]
+            let targetAngle = birdSpeed > 0 ? maxAngle : -maxAngle;
+            angle += (targetAngle - angle) * rotationSpeed; // Плавное изменение наклона
 
             // Проверка столкновения с землёй и небом
             if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
@@ -125,9 +136,6 @@
         function drawGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Рисуем птицу
-            ctx.drawImage(birdImg, birdX - birdSize / 2, birdY - birdSize / 2, birdSize, birdSize);
-
             // Рисуем трубы
             pipes.forEach((pipe) => {
                 ctx.fillStyle = "#228B22"; // Цвет стен (труб) — зелёный
@@ -136,6 +144,13 @@
                 // Нижняя труба
                 ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
             });
+
+            // Рисуем птицу с учётом угла наклона
+            ctx.save(); // Сохраняем текущую конфигурацию холста
+            ctx.translate(birdX, birdY); // Перемещаем холст к положению птицы
+            ctx.rotate(angle * Math.PI / 180); // Поворачиваем холст на угол наклона
+            ctx.drawImage(birdImg, -birdSize / 2, -birdSize / 2, birdSize, birdSize);
+            ctx.restore(); // Восстанавливаем конфигурацию холста
 
             // Отрисовка счёта
             ctx.fillStyle = "black";
@@ -160,6 +175,7 @@
             pipes = [];
             score = 0;
             isGameOver = false;
+            angle = 0; // Сбрасываем угол наклона
         }
 
         // Запуск игрового цикла
