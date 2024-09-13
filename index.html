@@ -36,7 +36,7 @@
         let birdX = 50;
         let birdY = canvas.height / 2;
         let birdSize = 40; // Размер птицы
-        let gravity = 1.5;
+        let gravity = 0.6;
         let birdSpeed = 0;
         let isGameOver = false;
         let score = 0;
@@ -103,9 +103,12 @@
 
                 // Проверка на столкновение с трубами
                 if (
-                    birdX + birdSize > pipe.x &&
-                    birdX - birdSize < pipe.x + pipeWidth &&
-                    (birdY - birdSize < pipe.topHeight || birdY + birdSize > pipe.bottomY)
+                    birdX + birdSize / 2 > pipe.x && 
+                    birdX - birdSize / 2 < pipe.x + pipeWidth && 
+                    (
+                        birdY - birdSize / 2 < pipe.topHeight || // Проверка столкновения с верхней трубой
+                        birdY + birdSize / 2 > pipe.bottomY // Проверка столкновения с нижней трубой
+                    )
                 ) {
                     endGame();
                 }
