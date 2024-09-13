@@ -1,183 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        canvas {
-            display: block;
-            background-color: #70c5ce;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Bird</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #70c5ce;
+    }
+
+    canvas {
+      background-color: #fff;
+      border: 2px solid #000;
+    }
+  </style>
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+  <canvas id="canvas" width="320" height="480"></canvas>
 
-        // Устанавливаем размеры canvas
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
 
-        // Параметры игры
-        let birdX = 50;
-        let birdY = canvas.height / 2;
-        let birdSize = 40;
-        let gravity = 0.6;  // Гравитация для падения птицы
-        let birdSpeed = 0;  // Скорость движения птицы по вертикали
-        let isGameOver = false;
-        let score = 0;
-        let pipes = [];
-        let pipeWidth = 80;
-        let pipeGap = 200;  // Зазор между верхней и нижней трубами
-        let pipeSpeed = 3;  // Скорость движения труб (по горизонтали)
+    // Загружаем изображения из локальной директории
+    const birdImg = new Image();
+    birdImg.src = "assets/camoletik.png"; // Локальная картинка птицы
+    const bgImg = new Image();
+    bgImg.src = "assets/kvadratik.png";  // Локальная картинка фона
+    const pipeNorthImg = new Image();
+    pipeNorthImg.src = "assets/kvadratik.png"; // Локальная картинка верхней трубы
+    const pipeSouthImg = new Image();
+    pipeSouthImg.src = "assets/kvadratik.png"; // Локальная картинка нижней трубы
 
-        // Загрузка изображений
-        const birdImg = new Image();
-        birdImg.src = 'assets/camoletik.png';
+    // Переменные
+    let birdX = 50;
+    let birdY = 150;
+    let gravity = 1.5;
+    let gap = 100;
+    let constant;
+    let score = 0;
 
-        const pipeTopImg = new Image();
-        pipeTopImg.src = 'assets/kvadratik.png';
+    const pipes = [];
+    pipes[0] = { x: canvas.width, y: 0 };
 
-        const pipeBottomImg = new Image();
-        pipeBottomImg.src = 'assets/pipe_bottom.png';
+    // Управление
+    document.addEventListener("keydown", moveUp);
 
-        // Проверка загрузки всех изображений перед стартом игры
-        let imagesLoaded = 0;
+    function moveUp() {
+      birdY -= 30;
+    }
 
-        function imageLoaded() {
-            imagesLoaded++;
-            if (imagesLoaded === 3) {
-                gameLoop();
-            }
-        }
+    // Основной цикл игры
+    function draw() {
+      // Фон
+      ctx.drawImage(bgImg, 0, 0);
 
-        birdImg.onload = imageLoaded;
-        pipeTopImg.onload = imageLoaded;
-        pipeBottomImg.onload = imageLoaded;
+      // Трубы
+      for (let i = 0; i < pipes.length; i++) {
+        constant = pipeNorthImg.height + gap;
+        ctx.drawImage(pipeNorthImg, pipes[i].x, pipes[i].y);
+        ctx.drawImage(pipeSouthImg, pipes[i].x, pipes[i].y + constant);
 
-        // Добавление труб
-        function addPipe() {
-            // Генерируем высоту для верхней трубы
-            let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);  // Убедимся, что труба не слишком маленькая и не слишком большая
-            pipes.push({
-                x: canvas.width,  // Трубы появляются с правой стороны экрана
-                topHeight: pipeHeight,
-                bottomY: pipeHeight + pipeGap  // Нижняя труба начинается сразу после верхней
-            });
-        }
-        setInterval(addPipe, 3000);  // Добавляем новые трубы каждые 3 секунды
+        pipes[i].x--;
 
-        // Обработка нажатий клавиш и кликов мыши
-        function flap() {
-            if (!isGameOver) {
-                birdSpeed = -10; // Птица поднимается
-            } else {
-                restartGame(); // Перезапуск игры
-            }
+        if (pipes[i].x === 120) {
+          pipes.push({ x: canvas.width, y: Math.floor(Math.random() * pipeNorthImg.height) - pipeNorthImg.height });
         }
 
-        window.addEventListener("keydown", function (e) {
-            if (e.key === ' ' || e.key.toLowerCase() === 's') {
-                flap();
-            }
-        });
-
-        window.addEventListener("click", flap);
-        window.addEventListener("touchstart", flap);
-
-        // Основной игровой цикл
-        function gameLoop() {
-            if (!isGameOver) {
-                updateGame();
-                drawGame();
-            }
-            requestAnimationFrame(gameLoop);
+        // Столкновение
+        if (
+          (birdX + birdImg.width >= pipes[i].x && birdX <= pipes[i].x + pipeNorthImg.width &&
+            (birdY <= pipes[i].y + pipeNorthImg.height || birdY + birdImg.height >= pipes[i].y + constant)) ||
+          birdY + birdImg.height >= canvas.height
+        ) {
+          location.reload(); // Перезагрузка страницы при столкновении
         }
 
-        // Обновление состояния игры
-        function updateGame() {
-            birdSpeed += gravity;  // Применяем гравитацию
-            birdY += birdSpeed;    // Обновляем положение птицы
-
-            // Проверка столкновения с землёй и небом
-            if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
-                endGame();
-            }
-
-            // Обновление позиции труб и проверка на столкновение
-            pipes.forEach((pipe, index) => {
-                pipe.x -= pipeSpeed;  // Двигаем трубы влево
-
-                // Проверка на столкновение с трубами
-                if (
-                    birdX + birdSize > pipe.x &&
-                    birdX - birdSize < pipe.x + pipeWidth &&
-                    (birdY - birdSize < pipe.topHeight || birdY + birdSize > pipe.bottomY)
-                ) {
-                    endGame();
-                }
-
-                // Удаление труб за пределами экрана
-                if (pipe.x + pipeWidth < 0) {
-                    pipes.splice(index, 1);
-                    score++;
-                }
-            });
+        if (pipes[i].x === 5) {
+          score++;
         }
+      }
 
-        // Отрисовка игры
-        function drawGame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Птица
+      ctx.drawImage(birdImg, birdX, birdY);
 
-            // Рисуем птицу
-            ctx.drawImage(birdImg, birdX - birdSize / 2, birdY - birdSize / 2, birdSize, birdSize);
+      birdY += gravity;
 
-            // Рисуем трубы
-            pipes.forEach((pipe) => {
-                // Верхняя труба
-                ctx.drawImage(pipeTopImg, pipe.x, pipe.topHeight - pipeTopImg.height);
-                // Нижняя труба
-                ctx.drawImage(pipeBottomImg, pipe.x, pipe.bottomY);
-            });
+      // Отображение счета
+      ctx.fillStyle = "#000";
+      ctx.font = "20px Verdana";
+      ctx.fillText("Score: " + score, 10, canvas.height - 20);
 
-            // Отрисовка счёта
-            ctx.fillStyle = "black";
-            ctx.font = "24px Arial";
-            ctx.fillText("Score: " + score, 10, 30);
-        }
+      requestAnimationFrame(draw);
+    }
 
-        // Завершение игры
-        function endGame() {
-            isGameOver = true;
-            ctx.fillStyle = "red";
-            ctx.font = "48px Arial";
-            ctx.fillText("Game Over!", canvas.width / 2 - 150, canvas.height / 2);
-            ctx.font = "24px Arial";
-            ctx.fillText("Click to restart", canvas.width / 2 - 100, canvas.height / 2 + 50);
-        }
-
-        // Перезапуск игры
-        function restartGame() {
-            birdY = canvas.height / 2;
-            birdSpeed = 0;
-            pipes = [];
-            score = 0;
-            isGameOver = false;
-        }
-
-        // Запуск игрового цикла после загрузки изображений
-        gameLoop();
-    </script>
+    draw();
+  </script>
 </body>
 </html>
