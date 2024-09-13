@@ -29,18 +29,18 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Параметры птицы
+        // Параметры игры
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40; // Размер птицы
-        let gravity = 2.1;
-        let birdSpeed = 4;
+        let birdSize = 40;
+        let gravity = 0.6;
+        let birdSpeed = 0;
         let isGameOver = false;
         let score = 0;
         let pipes = [];
         let pipeWidth = 80;
-        let pipeGap = 200;
-        let pipeSpeed = 2;
+        let pipeGap = 200;  // Расстояние между верхней и нижней трубами
+        let pipeSpeed = 3;  // Скорость движения труб
 
         // Загрузка изображений
         const birdImg = new Image();
@@ -52,21 +52,36 @@
         const pipeBottomImg = new Image();
         pipeBottomImg.src = 'assets/pipe_bottom.png';
 
+        // Проверка загрузки всех изображений перед стартом игры
+        let imagesLoaded = 0;
+
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded === 3) {
+                gameLoop();
+            }
+        }
+
+        birdImg.onload = imageLoaded;
+        pipeTopImg.onload = imageLoaded;
+        pipeBottomImg.onload = imageLoaded;
+
         // Добавление труб
         function addPipe() {
-            let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);
+            // Генерируем высоту для верхней трубы
+            let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);  // Убедимся, что труба не слишком маленькая и не слишком большая
             pipes.push({
-                x: canvas.width,
+                x: canvas.width,  // Трубы появляются с правой стороны экрана
                 topHeight: pipeHeight,
-                bottomY: pipeHeight + pipeGap
+                bottomY: pipeHeight + pipeGap  // Нижняя труба начинается сразу после верхней
             });
         }
-        setInterval(addPipe, 3000); // Добавляем трубы каждые 3 секунды
+        setInterval(addPipe, 3000);  // Добавляем новые трубы каждые 3 секунды
 
         // Обработка нажатий клавиш и кликов мыши
         function flap() {
             if (!isGameOver) {
-                birdSpeed = -10; // Прыжок птицы
+                birdSpeed = -10; // Птица поднимается
             } else {
                 restartGame(); // Перезапуск игры
             }
@@ -92,8 +107,8 @@
 
         // Обновление состояния игры
         function updateGame() {
-            birdSpeed += gravity;
-            birdY += birdSpeed;
+            birdSpeed += gravity;  // Применяем гравитацию
+            birdY += birdSpeed;    // Обновляем положение птицы
 
             // Проверка столкновения с землёй и небом
             if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
@@ -102,7 +117,7 @@
 
             // Обновление позиции труб и проверка на столкновение
             pipes.forEach((pipe, index) => {
-                pipe.x -= pipeSpeed;
+                pipe.x -= pipeSpeed;  // Двигаем трубы влево
 
                 // Проверка на столкновение с трубами
                 if (
@@ -161,7 +176,7 @@
             isGameOver = false;
         }
 
-        // Запуск игрового цикла
+        // Запуск игрового цикла после загрузки изображений
         gameLoop();
     </script>
 </body>
