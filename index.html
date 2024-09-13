@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,93 +7,139 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
             background-color: #70c5ce;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
 </head>
 <body>
+    <canvas id="gameCanvas"></canvas>
     <script>
-        // Основная конфигурация игры
-        const config = {
-            type: Phaser.AUTO,
-            width: 400,
-            height: 600,
-            physics: {
-                default: 'arcade',
-                arcade: {
-                    gravity: { y: 300 }
-                }
-            },
-            scene: {
-                preload: preload,
-                create: create,
-                update: update
-            }
-        };
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
 
-        const game = new Phaser.Game(config);
-        let bird;
-        let pipes;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let birdX = 50;
+        let birdY = canvas.height / 2;
+        let birdSize = 20;
+        let gravity = 0.6;
+        let birdSpeed = 0;
+        let isGameOver = false;
         let score = 0;
-        let scoreText;
+        let pipes = [];
+        let pipeWidth = 50;
+        let pipeGap = 150;
+        let pipeSpeed = 2;
 
-        function preload() {
-            this.load.image('bird', 'assets/path13.png');
-            this.load.image('pipe', 'assets/kvadrat.jpg');
-        }
-
-        function create() {
-            bird = this.physics.add.sprite(100, 245, 'bird').setScale(0.1);
-            bird.setCollideWorldBounds(true);
-            bird.setBounce(0.2);
-
-            this.input.on('pointerdown', flap);
-
-            pipes = this.physics.add.group();
-            this.time.addEvent({
-                delay: 1500,
-                callback: addPipeRow,
-                callbackScope: this,
-                loop: true
+        // Добавление труб через интервалы
+        function addPipe() {
+            let pipeHeight = Math.random() * (canvas.height - pipeGap);
+            pipes.push({
+                x: canvas.width,
+                topHeight: pipeHeight,
+                bottomY: pipeHeight + pipeGap,
             });
-
-            scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
         }
+        setInterval(addPipe, 3000); // Добавляем трубы каждые 3 секунды
 
-        function update() {
-            if (bird.y > config.height || bird.y < 0) {
-                this.scene.restart();
-                score = 0;
+        // Обработка нажатия клавиши
+        window.addEventListener("keydown", function () {
+            if (!isGameOver) {
+                birdSpeed = -10; // Птица подпрыгивает
+            } else {
+                restartGame(); // Перезапуск игры
             }
+        });
+
+        // Основной игровой цикл
+        function gameLoop() {
+            if (!isGameOver) {
+                updateGame();
+                drawGame();
+            }
+            requestAnimationFrame(gameLoop);
         }
 
-        function flap() {
-            bird.setVelocityY(-350);
-        }
+        // Обновление состояния игры
+        function updateGame() {
+            birdSpeed += gravity;
+            birdY += birdSpeed;
 
-        function addPipeRow() {
-            const gap = Phaser.Math.Between(100, 400);
+            // Проверка столкновения с землёй и небом
+            if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
+                endGame();
+            }
 
-            pipes.create(400, gap - 150, 'pipe').setScale(0.5).setOrigin(0, 1);
-            pipes.create(400, gap + 150, 'pipe').setScale(0.5).setOrigin(0, 0);
+            // Обновление позиции труб и проверка на столкновение
+            pipes.forEach((pipe, index) => {
+                pipe.x -= pipeSpeed;
 
-            pipes.setVelocityX(-200);
+                // Проверка на столкновение с трубами
+                if (
+                    birdX + birdSize > pipe.x &&
+                    birdX - birdSize < pipe.x + pipeWidth &&
+                    (birdY - birdSize < pipe.topHeight || birdY + birdSize > pipe.bottomY)
+                ) {
+                    endGame();
+                }
 
-            pipes.children.iterate((pipe) => {
-                if (pipe.x < -pipe.width) {
-                    pipe.destroy();
+                // Удаление труб за пределами экрана
+                if (pipe.x + pipeWidth < 0) {
+                    pipes.splice(index, 1);
+                    score++;
                 }
             });
-
-            score += 1;
-            scoreText.setText('Score: ' + score);
         }
+
+        // Отрисовка игры
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Рисуем птицу
+            ctx.fillStyle = "yellow";
+            ctx.beginPath();
+            ctx.arc(birdX, birdY, birdSize, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Рисуем трубы
+            pipes.forEach((pipe) => {
+                ctx.fillStyle = "green";
+                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight); // Верхняя труба
+                ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY); // Нижняя труба
+            });
+
+            // Отрисовка счёта
+            ctx.fillStyle = "black";
+            ctx.font = "24px Arial";
+            ctx.fillText("Score: " + score, 10, 30);
+        }
+
+        // Завершение игры
+        function endGame() {
+            isGameOver = true;
+            ctx.fillStyle = "red";
+            ctx.font = "48px Arial";
+            ctx.fillText("Game Over!", canvas.width / 2 - 150, canvas.height / 2);
+            ctx.font = "24px Arial";
+            ctx.fillText("Press any key to restart", canvas.width / 2 - 150, canvas.height / 2 + 50);
+        }
+
+        // Перезапуск игры
+        function restartGame() {
+            birdY = canvas.height / 2;
+            birdSpeed = 0;
+            pipes = [];
+            score = 0;
+            isGameOver = false;
+        }
+
+        // Запуск игрового цикла
+        gameLoop();
     </script>
 </body>
 </html>
