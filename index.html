@@ -21,7 +21,6 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Устанавливаем размеры canvas
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -29,10 +28,9 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Параметры птицы
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40; // Размер птицы
+        let birdSize = 40;
         let gravity = 0.6;
         let birdSpeed = 0;
         let isGameOver = false;
@@ -42,17 +40,9 @@
         let pipeGap = 200;
         let pipeSpeed = 2;
 
-        // Загрузка изображений
         const birdImg = new Image();
         birdImg.src = 'assets/camoletik.png';
 
-        const pipeTopImg = new Image();
-        pipeTopImg.src = 'assets/kvadratik.png';
-
-        const pipeBottomImg = new Image();
-        pipeBottomImg.src = 'assets/pipe_bottom.png';
-
-        // Добавление труб
         function addPipe() {
             let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);
             pipes.push({
@@ -61,14 +51,13 @@
                 bottomY: pipeHeight + pipeGap
             });
         }
-        setInterval(addPipe, 3000); // Добавляем трубы каждые 3 секунды
+        setInterval(addPipe, 3000);
 
-        // Обработка нажатий клавиш и кликов мыши
         function flap() {
             if (!isGameOver) {
-                birdSpeed = -10; // Прыжок птицы
+                birdSpeed = -10;
             } else {
-                restartGame(); // Перезапуск игры
+                restartGame();
             }
         }
 
@@ -81,7 +70,6 @@
         window.addEventListener("click", flap);
         window.addEventListener("touchstart", flap);
 
-        // Основной игровой цикл
         function gameLoop() {
             if (!isGameOver) {
                 updateGame();
@@ -90,21 +78,17 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // Обновление состояния игры
         function updateGame() {
             birdSpeed += gravity;
             birdY += birdSpeed;
 
-            // Проверка столкновения с землёй и небом
             if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
                 endGame();
             }
 
-            // Обновление позиции труб и проверка на столкновение
             pipes.forEach((pipe, index) => {
                 pipe.x -= pipeSpeed;
 
-                // Проверка на столкновение с трубами
                 if (
                     birdX + birdSize > pipe.x &&
                     birdX - birdSize < pipe.x + pipeWidth &&
@@ -113,7 +97,6 @@
                     endGame();
                 }
 
-                // Удаление труб за пределами экрана
                 if (pipe.x + pipeWidth < 0) {
                     pipes.splice(index, 1);
                     score++;
@@ -121,28 +104,22 @@
             });
         }
 
-        // Отрисовка игры
         function drawGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Рисуем птицу
             ctx.drawImage(birdImg, birdX - birdSize / 2, birdY - birdSize / 2, birdSize, birdSize);
 
-            // Рисуем трубы
             pipes.forEach((pipe) => {
-                // Верхняя труба
-                ctx.drawImage(pipeTopImg, pipe.x, pipe.topHeight - pipeTopImg.height);
-                // Нижняя труба
-                ctx.drawImage(pipeBottomImg, pipe.x, pipe.bottomY);
+                ctx.fillStyle = "green";
+                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+                ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
             });
 
-            // Отрисовка счёта
             ctx.fillStyle = "black";
             ctx.font = "24px Arial";
             ctx.fillText("Score: " + score, 10, 30);
         }
 
-        // Завершение игры
         function endGame() {
             isGameOver = true;
             ctx.fillStyle = "red";
@@ -152,7 +129,6 @@
             ctx.fillText("Click to restart", canvas.width / 2 - 100, canvas.height / 2 + 50);
         }
 
-        // Перезапуск игры
         function restartGame() {
             birdY = canvas.height / 2;
             birdSpeed = 0;
@@ -161,7 +137,6 @@
             isGameOver = false;
         }
 
-        // Запуск игрового цикла
         gameLoop();
     </script>
 </body>
