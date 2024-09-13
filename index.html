@@ -21,13 +21,16 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Устанавливаем размеры canvas
+        // Пропорции для экрана 6,1 дюймов (например, iPhone XR)
+        const screenWidth = 828;
+        const screenHeight = 1792;
+
+        // Устанавливаем размеры canvas для мобильного формата
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = screenWidth;
+            canvas.height = screenHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        resizeCanvas(); // Устанавливаем размер при загрузке страницы
 
         // Параметры птицы
         let birdX = 50;
@@ -39,12 +42,18 @@
         let score = 0;
         let pipes = [];
         let pipeWidth = 80;
-        let pipeGap = 200;
-        let pipeSpeed = 2;
+        let pipeGap = 250;
+        let pipeSpeed = 3;
 
-        // Загрузка изображения птицы
+        // Загрузка изображений
         const birdImg = new Image();
-        birdImg.src = 'assets/camoletik.png'; // Текстура птицы
+        birdImg.src = 'assets/camoletik.png'; // Собственная моделька птицы
+
+        const pipeTopImg = new Image();
+        pipeTopImg.src = 'assets/kvadratik.png'; // Собственная моделька верхней стены
+
+        const pipeBottomImg = new Image();
+        pipeBottomImg.src = 'assets/pipe_bottom.png'; // Собственная моделька нижней стены
 
         // Добавление труб
         function addPipe() {
@@ -57,7 +66,7 @@
         }
         setInterval(addPipe, 3000); // Добавляем трубы каждые 3 секунды
 
-        // Обработка нажатий клавиш и кликов мыши
+        // Обработка нажатий клавиш, кликов мыши и касаний экрана
         function flap() {
             if (!isGameOver) {
                 birdSpeed = -10; // Прыжок птицы
@@ -122,15 +131,13 @@
             // Рисуем птицу
             ctx.drawImage(birdImg, birdX - birdSize / 2, birdY - birdSize / 2, birdSize, birdSize);
 
-            // Рисуем трубы (как прямоугольники)
+            // Рисуем трубы
             pipes.forEach((pipe) => {
-                // Верхняя труба
-                ctx.fillStyle = "green"; // Задаём цвет труб
-                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-
-                // Нижняя труба
-                ctx.fillStyle = "green"; // Задаём цвет труб
-                ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
+                // Верхняя труба (используем модельку)
+                ctx.drawImage(pipeTopImg, pipe.x, pipe.topHeight - pipeTopImg.height, pipeWidth, pipeTopImg.height);
+                
+                // Нижняя труба (используем модельку)
+                ctx.drawImage(pipeBottomImg, pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
             });
 
             // Отрисовка счёта
