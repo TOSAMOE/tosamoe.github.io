@@ -45,15 +45,9 @@
         let pipeGap = 250;
         let pipeSpeed = 3;
 
-        // Загрузка изображений
+        // Загрузка изображения для птицы
         const birdImg = new Image();
         birdImg.src = 'assets/camoletik.png'; // Собственная моделька птицы
-
-        const pipeTopImg = new Image();
-        pipeTopImg.src = 'assets/kvadratik.png'; // Собственная моделька верхней стены
-
-        const pipeBottomImg = new Image();
-        pipeBottomImg.src = 'assets/pipe_bottom.png'; // Собственная моделька нижней стены
 
         // Добавление труб
         function addPipe() {
@@ -133,11 +127,11 @@
 
             // Рисуем трубы
             pipes.forEach((pipe) => {
-                // Верхняя труба (используем модельку)
-                ctx.drawImage(pipeTopImg, pipe.x, pipe.topHeight - pipeTopImg.height, pipeWidth, pipeTopImg.height);
-                
-                // Нижняя труба (используем модельку)
-                ctx.drawImage(pipeBottomImg, pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
+                ctx.fillStyle = "#228B22"; // Цвет стен (труб) — зелёный
+                // Верхняя труба
+                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+                // Нижняя труба
+                ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
             });
 
             // Отрисовка счёта
