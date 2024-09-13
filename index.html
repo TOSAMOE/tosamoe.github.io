@@ -35,19 +35,19 @@
         // Параметры птицы
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40; // Размер птицы
-        let gravity = 0.4; // Уменьшенная гравитация для более плавного движения
+        let birdSize = 40 * 2.5; // Увеличиваем размер птицы в 2,5 раза
+        let gravity = 0.4;
         let birdSpeed = 0;
-        let lift = -8; // Сила подъёма, чтобы самолётик плавно взлетал
-        let drag = 0.98; // Добавляем трение для замедления движения
-        let angle = 0; // Угол наклона самолёта
-        let maxAngle = 25; // Максимальный наклон в градусах
-        let rotationSpeed = 0.05; // Скорость изменения наклона
+        let lift = -8;
+        let drag = 0.98;
+        let angle = 0;
+        let maxAngle = 25;
+        let rotationSpeed = 0.05;
         let isGameOver = false;
         let score = 0;
         let pipes = [];
-        let pipeWidth = 80;
-        let pipeGap = 250;
+        let pipeWidth = 80 * 2; // Увеличиваем ширину труб в 2 раза
+        let pipeGap = 250 + 100; // Увеличиваем щель между трубами на 100px
         let pipeSpeed = 3;
 
         // Загрузка изображения для птицы
@@ -96,12 +96,12 @@
         function updateGame() {
             // Анимация движения птицы (бумажный самолётик)
             birdSpeed += gravity;
-            birdSpeed *= drag; // Добавляем трение
+            birdSpeed *= drag;
             birdY += birdSpeed;
 
             // Ограничение наклона в пределах [-maxAngle, maxAngle]
             let targetAngle = birdSpeed > 0 ? maxAngle : -maxAngle;
-            angle += (targetAngle - angle) * rotationSpeed; // Плавное изменение наклона
+            angle += (targetAngle - angle) * rotationSpeed;
 
             // Проверка столкновения с землёй и небом
             if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
@@ -117,8 +117,8 @@
                     birdX + birdSize / 2 > pipe.x && 
                     birdX - birdSize / 2 < pipe.x + pipeWidth && 
                     (
-                        birdY - birdSize / 2 < pipe.topHeight || // Проверка столкновения с верхней трубой
-                        birdY + birdSize / 2 > pipe.bottomY // Проверка столкновения с нижней трубой
+                        birdY - birdSize / 2 < pipe.topHeight || 
+                        birdY + birdSize / 2 > pipe.bottomY
                     )
                 ) {
                     endGame();
@@ -146,11 +146,11 @@
             });
 
             // Рисуем птицу с учётом угла наклона
-            ctx.save(); // Сохраняем текущую конфигурацию холста
-            ctx.translate(birdX, birdY); // Перемещаем холст к положению птицы
-            ctx.rotate(angle * Math.PI / 180); // Поворачиваем холст на угол наклона
+            ctx.save();
+            ctx.translate(birdX, birdY);
+            ctx.rotate(angle * Math.PI / 180);
             ctx.drawImage(birdImg, -birdSize / 2, -birdSize / 2, birdSize, birdSize);
-            ctx.restore(); // Восстанавливаем конфигурацию холста
+            ctx.restore();
 
             // Отрисовка счёта
             ctx.fillStyle = "black";
@@ -175,7 +175,7 @@
             pipes = [];
             score = 0;
             isGameOver = false;
-            angle = 0; // Сбрасываем угол наклона
+            angle = 0;
         }
 
         // Запуск игрового цикла
