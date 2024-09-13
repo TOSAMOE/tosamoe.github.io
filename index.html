@@ -1,11 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=https://t.me/tosamoedo16_bot/">
-    <title>Redirecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #70c5ce;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
 </head>
 <body>
-    <p>If you are not redirected automatically, follow <a href="https://t.me/tosamoedo16_bot/">this link</a>.</p>
+    <script>
+        // Основная конфигурация игры
+        const config = {
+            type: Phaser.AUTO,
+            width: 400,
+            height: 600,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 300 }
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        const game = new Phaser.Game(config);
+        let bird;
+        let pipes;
+        let score = 0;
+        let scoreText;
+
+        function preload() {
+            this.load.image('bird', 'https://examples.phaser.io/assets/sprites/bird.png');
+            this.load.image('pipe', 'https://examples.phaser.io/assets/sprites/pipe.png');
+        }
+
+        function create() {
+            bird = this.physics.add.sprite(100, 245, 'bird').setScale(0.1);
+            bird.setCollideWorldBounds(true);
+            bird.setBounce(0.2);
+
+            this.input.on('pointerdown', flap);
+
+            pipes = this.physics.add.group();
+            this.time.addEvent({
+                delay: 1500,
+                callback: addPipeRow,
+                callbackScope: this,
+                loop: true
+            });
+
+            scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
+        }
+
+        function update() {
+            if (bird.y > config.height || bird.y < 0) {
+                this.scene.restart();
+                score = 0;
+            }
+        }
+
+        function flap() {
+            bird.setVelocityY(-350);
+        }
+
+        function addPipeRow() {
+            const gap = Phaser.Math.Between(100, 400);
+
+            pipes.create(400, gap - 150, 'pipe').setScale(0.5).setOrigin(0, 1);
+            pipes.create(400, gap + 150, 'pipe').setScale(0.5).setOrigin(0, 0);
+
+            pipes.setVelocityX(-200);
+
+            pipes.children.iterate((pipe) => {
+                if (pipe.x < -pipe.width) {
+                    pipe.destroy();
+                }
+            });
+
+            score += 1;
+            scoreText.setText('Score: ' + score);
+        }
+    </script>
 </body>
 </html>
