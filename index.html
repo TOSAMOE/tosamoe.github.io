@@ -29,10 +29,10 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Параметры игры
+        // Параметры птицы
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40;
+        let birdSize = 40; // Размер птицы
         let gravity = 0.6;
         let birdSpeed = 0;
         let isGameOver = false;
@@ -51,20 +51,6 @@
 
         const pipeBottomImg = new Image();
         pipeBottomImg.src = 'assets/pipe_bottom.png';
-
-        // Проверка загрузки всех изображений перед стартом игры
-        let imagesLoaded = 0;
-
-        function imageLoaded() {
-            imagesLoaded++;
-            if (imagesLoaded === 3) {
-                gameLoop();
-            }
-        }
-
-        birdImg.onload = imageLoaded;
-        pipeTopImg.onload = imageLoaded;
-        pipeBottomImg.onload = imageLoaded;
 
         // Добавление труб
         function addPipe() {
@@ -175,7 +161,7 @@
             isGameOver = false;
         }
 
-        // Запуск игрового цикла после загрузки изображений
+        // Запуск игрового цикла
         gameLoop();
     </script>
 </body>
