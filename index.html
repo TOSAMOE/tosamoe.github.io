@@ -80,14 +80,14 @@
         let gravity = 0.25;
         let birdSpeed = 0;
         let lift = -3;
-        let maxLift = -12;
-        let liftIncreaseRate = 0.2;
+        let maxLift = -8; // Уменьшили максимальную подъёмную силу для более плавного движения
+        let liftIncreaseRate = 0.1; // Уменьшили скорость увеличения подъёмной силы
         let currentLift = lift;
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 90; // Увеличили максимальный угол
-        let minAngle = -75; // Увеличили минимальный угол
+        let maxAngle = 90;
+        let minAngle = -75;
         let baseRotationSpeed = 0.03;
         let currentRotationSpeed = baseRotationSpeed;
         let pipes = [];
@@ -99,8 +99,8 @@
         let releaseTimer = 0;
         let releaseDelay = 15;
         let normalSpeed = pipeSpeed;
-        let boostSpeed = 6;
-        let accelerationDuration = 10; // Плавное изменение скорости в течение 0.1 секунды (10 кадров)
+        let boostSpeed = 4; // Уменьшили скорость ускорения
+        let accelerationDuration = 10;
         let accelerationStep = (boostSpeed - pipeSpeed) / accelerationDuration;
         let decelerationStep = (pipeSpeed - boostSpeed) / accelerationDuration;
 
@@ -122,13 +122,13 @@
                 isHolding = true;
                 releaseTimer = 0;
                 currentLift = lift;
-                acceleratePlane(); // Начинаем плавно ускоряться
+                acceleratePlane();
             }
         }
 
         function endHold() {
             isHolding = false;
-            deceleratePlane(); // Начинаем плавно замедляться
+            deceleratePlane();
         }
 
         function acceleratePlane() {
@@ -193,8 +193,8 @@
             currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle));
             angle += (targetAngle - angle) * currentRotationSpeed;
 
-            // Добавляем больше пространства сверху и снизу
-            if (birdY + birdHeight > canvas.height - 50 || birdY - birdHeight < 50) {
+            // Отодвигаем потолок и пол
+            if (birdY + birdHeight > canvas.height - 80 || birdY - birdHeight < 20) {
                 endGame();
             }
 
@@ -276,4 +276,3 @@
     </script>
 </body>
 </html>
-
