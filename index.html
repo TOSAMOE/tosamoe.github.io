@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird - Paper Plane Physics</title>
+    <title>AirCoin Bird</title>
     <style>
         body {
             margin: 0;
@@ -78,15 +78,13 @@
         let birdSize = 40 * 2;
         let gravity = 0.2; // Гравитация
         let birdSpeed = 0;
-        let lift = -1; // Подъёмная сила
-        let maxLift = -7; // Максимальная подъёмная сила
-        let birdLiftSpeed = lift;
-        let drag = 0.04; // Увеличено сопротивление для быстрого замедления
+        let lift = -4; // Подъёмная сила
+        let maxLift = -10; // Максимальная подъёмная сила при удержании
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
         let maxAngle = 90;
-        let rotationSpeed = 0.015; // Медленный поворот
+        let rotationSpeed = 0.03; // Скорость поворота
         let pipes = [];
         let pipeWidth = 80 * 1.5;
         let pipeGap = 250;
@@ -94,7 +92,7 @@
         let score = 0;
         let airCoins = 0;
         let releaseTimer = 0;
-        let releaseDelay = 30; // Задержка 0,5 секунд перед падением
+        let releaseDelay = 30; // Задержка 0,5 секунд перед началом падения
 
         const birdImg = new Image();
         birdImg.src = 'assets/camokyr.png';
@@ -112,13 +110,13 @@
         function startHold() {
             if (!isGameOver) {
                 isHolding = true;
+                birdSpeed = lift; // При удержании применяем подъёмную силу
                 releaseTimer = 0;
             }
         }
 
         function endHold() {
             isHolding = false;
-            birdLiftSpeed = lift;
         }
 
         window.addEventListener("mousedown", startHold);
@@ -136,17 +134,15 @@
 
         function updateGame() {
             if (isHolding) {
-                // При удержании клика поднимаем самолётик
-                birdLiftSpeed = Math.max(birdLiftSpeed - 0.2, maxLift);
-                birdSpeed = birdLiftSpeed;
-                releaseTimer = 0;
+                // Самолётик поднимается, пока удерживаем клик
+                birdSpeed = lift;
             } else {
-                // После отпускания клика происходит замедление
+                // Самолётик замедляется и постепенно начинает падать
                 if (releaseTimer < releaseDelay) {
                     releaseTimer++;
-                    birdSpeed -= drag; // Быстрое снижение скорости при отпускании
+                    birdSpeed *= 0.95; // Постепенно замедляем подъём
                 } else {
-                    birdSpeed += gravity; // После 0.5 секунд начинает работать гравитация
+                    birdSpeed += gravity; // После задержки начинает действовать гравитация
                 }
             }
 
