@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird - Paper Plane Physics</title>
+    <title>PAPERSCY</title>
     <style>
         body {
             margin: 0;
@@ -76,15 +76,15 @@
         let birdX = 50;
         let birdY = canvas.height / 2;
         let birdSize = 40 * 2;
-        let gravity = 0.2; // Гравитация
+        let gravity = 0.2;
         let birdSpeed = 0;
         let lift = -4; // Подъёмная сила
         let maxLift = -10; // Максимальная подъёмная сила при удержании
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 90;
-        let minAngle = -90;
+        let maxAngle = 45; // Максимальный угол поворота вверх
+        let minAngle = -45; // Максимальный угол поворота вниз
         let baseRotationSpeed = 0.03; // Базовая скорость поворота
         let currentRotationSpeed = baseRotationSpeed; // Текущая скорость поворота
         let pipes = [];
@@ -96,9 +96,8 @@
         let releaseTimer = 0;
         let releaseDelay = 30; // Задержка 0,5 секунд перед началом падения
 
-        // Проверяем загружено ли изображение и добавляем отладку
         const birdImg = new Image();
-        birdImg.src = 'assets/camokyr.png'; // Убедитесь, что путь к изображению правильный
+        birdImg.src = 'assets/camokyr.png';
         birdImg.onload = () => {
             console.log("Image loaded successfully");
         };
@@ -161,8 +160,16 @@
 
             birdY += birdSpeed;
 
-            let targetAngle = birdSpeed > 0 ? minAngle : maxAngle;
-            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle));
+            let targetAngle;
+            if (birdSpeed < 0) {
+                // Когда взлетает, угол вверх
+                targetAngle = maxAngle;
+            } else {
+                // Когда падает, угол вниз
+                targetAngle = minAngle;
+            }
+
+            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle)); 
             angle += (targetAngle - angle) * currentRotationSpeed;
 
             if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
@@ -201,17 +208,14 @@
             ctx.translate(birdX, birdY);
             ctx.rotate(angle * Math.PI / 180);
 
-            // Рисуем изображение самолёта только если оно загружено
             if (birdImg.complete && birdImg.naturalHeight !== 0) {
                 ctx.drawImage(birdImg, -birdSize / 2, -birdSize / 2, birdSize, birdSize);
             } else {
-                // Рисуем замену, если изображение не загружено
                 ctx.fillStyle = "gray";
                 ctx.fillRect(-birdSize / 2, -birdSize / 2, birdSize, birdSize);
             }
             ctx.restore();
 
-            // Отображаем счёт
             ctx.fillStyle = "black";
             ctx.font = "24px Arial";
             ctx.fillText("Score: " + score, canvas.width / 2 - 50, 30);
