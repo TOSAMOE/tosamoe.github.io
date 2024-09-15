@@ -18,7 +18,6 @@
             background-color: #70c5ce;
         }
 
-        /* Для мобильных устройств делаем канвас на весь экран */
         @media (max-width: 768px) {
             canvas {
                 width: 100vw;
@@ -26,11 +25,10 @@
             }
         }
 
-        /* Для компьютеров фиксируем размеры игры и центрируем */
         @media (min-width: 769px) {
             canvas {
-                width: 414px; /* Примерно ширина экрана мобильного устройства 6,1 дюймов */
-                height: 896px; /* Примерно высота экрана мобильного устройства 6,1 дюймов */
+                width: 414px;
+                height: 896px;
             }
         }
     </style>
@@ -41,16 +39,13 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Обновляем размеры canvas в зависимости от устройства
         function resizeCanvas() {
             if (window.innerWidth < 769) {
-                // Мобильные устройства — канвас на весь экран
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             } else {
-                // Компьютеры — фиксированные размеры
-                canvas.width = 414; // Примерно ширина экрана 6,1 дюймов
-                canvas.height = 896; // Примерно высота экрана 6,1 дюймов
+                canvas.width = 414;
+                canvas.height = 896;
             }
         }
         window.addEventListener('resize', resizeCanvas);
@@ -59,26 +54,26 @@
         // Параметры птицы
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40 * 2; // Увеличиваем размер птицы в 2 раза
+        let birdSize = 40 * 2;
         let gravity = 0.4;
         let birdSpeed = 0;
-        let lift = -8;
-        let drag = 0.98;
+        let lift = -2;
+        let maxLift = -15; // Максимальная скорость подъёма
+        let birdLiftSpeed = lift;
+        let isHolding = false;
+        let isGameOver = false;
         let angle = 0;
         let maxAngle = 25;
         let rotationSpeed = 0.05;
-        let isGameOver = false;
-        let score = 0;
         let pipes = [];
-        let pipeWidth = 80 * 1.5; // Увеличиваем ширину труб в 1.5 раза
-        let pipeGap = 250 + 100; // Увеличиваем щель между трубами на 100px
+        let pipeWidth = 80 * 1.5;
+        let pipeGap = 250;
         let pipeSpeed = 3;
+        let score = 0;
 
-        // Загрузка изображения для птицы
         const birdImg = new Image();
-        birdImg.src = 'assets/camobuma.png'; // Собственная моделька самолётика
+        birdImg.src = 'assets/camokyr.png';
 
-        // Добавление труб
         function addPipe() {
             let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);
             pipes.push({
@@ -87,27 +82,27 @@
                 bottomY: pipeHeight + pipeGap
             });
         }
-        setInterval(addPipe, 3000); // Добавляем трубы каждые 3 секунды
+        setInterval(addPipe, 3000);
 
-        // Обработка нажатий клавиш, кликов мыши и касаний экрана
-        function flap() {
+        // Начало удержания
+        function startHold() {
             if (!isGameOver) {
-                birdSpeed = lift; // Взлёт
-            } else {
-                restartGame(); // Перезапуск игры
+                isHolding = true;
             }
         }
 
-        window.addEventListener("keydown", function (e) {
-            if (e.key === ' ' || e.key.toLowerCase() === 's') {
-                flap();
-            }
-        });
+        // Окончание удержания
+        function endHold() {
+            isHolding = false;
+            birdLiftSpeed = lift; // Сбрасываем силу подъёма
+        }
 
-        window.addEventListener("click", flap);
-        window.addEventListener("touchstart", flap);
+        // Обработка нажатий клавиш, кликов мыши и касаний экрана
+        window.addEventListener("mousedown", startHold);
+        window.addEventListener("mouseup", endHold);
+        window.addEventListener("touchstart", startHold);
+        window.addEventListener("touchend", endHold);
 
-        // Основной игровой цикл
         function gameLoop() {
             if (!isGameOver) {
                 updateGame();
@@ -116,14 +111,18 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // Обновление состояния игры
         function updateGame() {
-            // Анимация движения птицы (бумажный самолётик)
-            birdSpeed += gravity;
-            birdSpeed *= drag;
+            // Если удерживается нажатие, увеличиваем подъёмную силу
+            if (isHolding) {
+                birdLiftSpeed = Math.max(birdLiftSpeed - 0.2, maxLift);
+                birdSpeed = birdLiftSpeed;
+            } else {
+                birdSpeed += gravity;
+            }
+
             birdY += birdSpeed;
 
-            // Ограничение наклона в пределах [-maxAngle, maxAngle]
+            // Поворот самолётика в зависимости от скорости
             let targetAngle = birdSpeed > 0 ? maxAngle : -maxAngle;
             angle += (targetAngle - angle) * rotationSpeed;
 
@@ -132,23 +131,17 @@
                 endGame();
             }
 
-            // Обновление позиции труб и проверка на столкновение
             pipes.forEach((pipe, index) => {
                 pipe.x -= pipeSpeed;
 
-                // Проверка на столкновение с трубами
                 if (
-                    birdX + birdSize / 2 > pipe.x && 
-                    birdX - birdSize / 2 < pipe.x + pipeWidth && 
-                    (
-                        birdY - birdSize / 2 < pipe.topHeight || 
-                        birdY + birdSize / 2 > pipe.bottomY
-                    )
+                    birdX + birdSize / 2 > pipe.x &&
+                    birdX - birdSize / 2 < pipe.x + pipeWidth &&
+                    (birdY - birdSize / 2 < pipe.topHeight || birdY + birdSize / 2 > pipe.bottomY)
                 ) {
                     endGame();
                 }
 
-                // Удаление труб за пределами экрана
                 if (pipe.x + pipeWidth < 0) {
                     pipes.splice(index, 1);
                     score++;
@@ -156,33 +149,26 @@
             });
         }
 
-        // Отрисовка игры
         function drawGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Рисуем трубы
             pipes.forEach((pipe) => {
-                ctx.fillStyle = "#228B22"; // Цвет стен (труб) — зелёный
-                // Верхняя труба
+                ctx.fillStyle = "#228B22";
                 ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-                // Нижняя труба
                 ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
             });
 
-            // Рисуем птицу с учётом угла наклона
             ctx.save();
             ctx.translate(birdX, birdY);
             ctx.rotate(angle * Math.PI / 180);
             ctx.drawImage(birdImg, -birdSize / 2, -birdSize / 2, birdSize, birdSize);
             ctx.restore();
 
-            // Отрисовка счёта
             ctx.fillStyle = "black";
             ctx.font = "24px Arial";
             ctx.fillText("Score: " + score, 10, 30);
         }
 
-        // Завершение игры
         function endGame() {
             isGameOver = true;
             ctx.fillStyle = "red";
@@ -192,7 +178,6 @@
             ctx.fillText("Click to restart", canvas.width / 2 - 100, canvas.height / 2 + 50);
         }
 
-        // Перезапуск игры
         function restartGame() {
             birdY = canvas.height / 2;
             birdSpeed = 0;
@@ -202,7 +187,6 @@
             angle = 0;
         }
 
-        // Запуск игрового цикла
         gameLoop();
     </script>
 </body>
