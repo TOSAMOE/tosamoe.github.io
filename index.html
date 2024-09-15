@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Plane Physics</title>
+    <title>HITBOXES</title>
     <style>
         body {
             margin: 0;
@@ -75,10 +75,10 @@
 
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40 * 2;
+        let birdSize = 80;
         let gravity = 0.2;
         let birdSpeed = 0;
-        let lift = -0.15; // Изменен для плавного взлета
+        let lift = -0.1;
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
@@ -86,13 +86,14 @@
         let minAngle = -60; 
         let baseRotationSpeed = 0.03;
         let pipes = [];
-        let pipeWidth = 80 * 1.5;
+        let pipeWidth = 120;
         let pipeGap = 250;
         let pipeSpeed = 3;
         let score = 0;
         let airCoins = 0;
         let releaseTimer = 0;
         let releaseDelay = 30;
+        let holdTime = 0; // Время удержания для увеличения подъема
 
         const birdImg = new Image();
         birdImg.src = 'assets/camokyr.png';
@@ -113,7 +114,7 @@
         function startHold() {
             if (!isGameOver) {
                 isHolding = true;
-                releaseTimer = 0;
+                holdTime = 0; // Сбросить время удержания
             }
         }
 
@@ -136,10 +137,17 @@
 
         function updateGame() {
             if (isHolding) {
-                birdSpeed += lift;
-                birdSpeed = Math.max(birdSpeed, lift * 10); // Ограничение для скорости подъема
+                holdTime += 1; // Увеличиваем время удержания
+                birdSpeed += lift * Math.min(holdTime / 30, 2); // Чем дольше держим, тем быстрее подъем
+                birdSpeed = Math.max(birdSpeed, lift * 10);
             } else {
+                holdTime = 0; // Сбрасываем время удержания
                 birdSpeed += gravity;
+
+                // Ускоренное восстановление после падения
+                if (birdSpeed > 2) {
+                    birdSpeed *= 0.9; // Смягчение при падении
+                }
             }
 
             birdY += birdSpeed;
@@ -202,15 +210,15 @@
                 ctx.fillRect(-birdSize / 2, -birdSize / 2, birdSize, birdSize);
             }
 
-            // Хитбокс самолёта (точная форма)
+            // Увеличенный хитбокс самолёта
             ctx.strokeStyle = "blue";
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(-birdSize / 2, -birdSize / 4); // Левый верхний угол
-            ctx.lineTo(birdSize / 2, 0);              // Нос
-            ctx.lineTo(-birdSize / 2, birdSize / 4);  // Левый нижний угол
+            ctx.moveTo(-birdSize / 2 - 10, -birdSize / 4); // Левый верхний угол (шире)
+            ctx.lineTo(birdSize / 2 + 10, 0);              // Нос (шире)
+            ctx.lineTo(-birdSize / 2 - 10, birdSize / 4);  // Левый нижний угол (шире)
             ctx.closePath();
-            ctx.stroke(); // Рисуем хитбокс самолёта
+            ctx.stroke(); // Рисуем увеличенный хитбокс самолёта
 
             ctx.restore();
 
@@ -242,3 +250,4 @@
     </script>
 </body>
 </html>
+
