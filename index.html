@@ -78,14 +78,14 @@
         let birdSize = 40 * 2;
         let gravity = 0.4;
         let birdSpeed = 0;
-        let lift = -2;
-        let maxLift = -15;
+        let lift = -10; // Мощность взлёта
+        let maxLift = -15; // Максимальная скорость подъёма
         let birdLiftSpeed = lift;
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
         let maxAngle = 90;
-        let rotationSpeed = 0.025; // Уменьшили скорость поворота в 2 раза
+        let rotationSpeed = 0.025; 
         let pipes = [];
         let pipeWidth = 80 * 1.5;
         let pipeGap = 250;
@@ -93,8 +93,8 @@
         let score = 0;
         let airCoins = 0;
         let releaseTimer = 0;
-        let releaseDelay = 30; // Задержка в 0.5 секунд (60 FPS / 2)
-        let pauseDuration = 0.5 * 60; // Задержка на 0,5 секунд в кадрах (60 FPS)
+        let releaseDelay = 30; // 0.5 секунды задержки
+        let paused = false;
 
         const birdImg = new Image();
         birdImg.src = 'assets/camokyr.png';
@@ -112,14 +112,17 @@
         function startHold() {
             if (!isGameOver) {
                 isHolding = true;
-                releaseTimer = 0;
+                paused = false; // Сброс состояния паузы
+                birdSpeed = lift; // Подъём самолёта
             }
         }
 
         function endHold() {
-            isHolding = false;
-            birdLiftSpeed = lift;
-            releaseTimer = pauseDuration; // Устанавливаем таймер на паузу после отпускания
+            if (!isGameOver) {
+                isHolding = false;
+                releaseTimer = releaseDelay; // Запуск таймера на 0,5 секунд
+                paused = true; // Переход в режим паузы
+            }
         }
 
         window.addEventListener("mousedown", startHold);
@@ -136,17 +139,14 @@
         }
 
         function updateGame() {
-            // Если удерживается нажатие, самолёт поднимается
-            if (isHolding) {
-                birdLiftSpeed = Math.max(birdLiftSpeed - 0.2, maxLift);
-                birdSpeed = birdLiftSpeed;
-                releaseTimer = 0; // Сбрасываем таймер задержки
-            } else {
-                // Если задержка ещё не закончилась, самолёт замер в воздухе
-                if (releaseTimer > 0) {
-                    releaseTimer--;
+            if (!paused) {
+                if (isHolding) {
+                    birdLiftSpeed = Math.max(birdLiftSpeed - 0.5, maxLift); // Постепенный подъём
+                    birdSpeed = birdLiftSpeed;
+                } else if (releaseTimer > 0) {
+                    releaseTimer--; // Ожидаем 0.5 секунд после отпускания
                 } else {
-                    birdSpeed += gravity; // Начинаем падение после паузы
+                    birdSpeed += gravity; // Начинаем падение после задержки
                 }
             }
 
@@ -173,7 +173,7 @@
                 if (pipe.x + pipeWidth < 0) {
                     pipes.splice(index, 1);
                     score++;
-                    airCoins = score * 500; // Счёт умножаем на 500
+                    airCoins = score * 500;
                 }
             });
         }
@@ -195,13 +195,12 @@
 
             ctx.fillStyle = "black";
             ctx.font = "24px Arial";
-            ctx.fillText("Score: " + score, canvas.width / 2 - 50, 30); // Центрируем счёт
+            ctx.fillText("Score: " + score, canvas.width / 2 - 50, 30);
         }
 
         function endGame() {
             isGameOver = true;
 
-            // Отображаем счёт и AirCoins
             scoreDisplay.innerHTML = "Score: " + score;
             airCoinsDisplay.innerHTML = "AirCoins earned: " + airCoins;
             gameOverScreen.style.display = "block";
@@ -220,6 +219,7 @@
             airCoins = 0;
             isGameOver = false;
             angle = 0;
+            paused = false;
         }
 
         gameLoop();
