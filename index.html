@@ -12,7 +12,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            position: relative;
+            font-family: Arial, sans-serif;
         }
 
         canvas {
@@ -33,33 +33,32 @@
             }
         }
 
-        #restartButton {
+        .game-over-screen {
             position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 10px 20px;
+            text-align: center;
+            color: red;
             font-size: 24px;
-            background-color: #ff6600;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            display: none;
-            cursor: pointer;
         }
 
-        #restartButton:hover {
-            background-color: #ff4500;
+        .game-over-screen button {
+            font-size: 24px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
-    <button id="restartButton">Play Again</button>
-
+    <div id="gameOverScreen" class="game-over-screen" style="display:none;">
+        <div id="scoreDisplay"></div>
+        <div id="airCoinsDisplay"></div>
+        <button id="restartButton">Play Again</button>
+    </div>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        const gameOverScreen = document.getElementById("gameOverScreen");
+        const scoreDisplay = document.getElementById("scoreDisplay");
+        const airCoinsDisplay = document.getElementById("airCoinsDisplay");
         const restartButton = document.getElementById("restartButton");
 
         function resizeCanvas() {
@@ -77,21 +76,24 @@
         let birdX = 50;
         let birdY = canvas.height / 2;
         let birdSize = 40 * 2;
-        let gravity = 0.2;
+        let gravity = 0.4;
         let birdSpeed = 0;
-        let lift = -0.1;
-        let maxLift = -6;
+        let lift = -2;
+        let maxLift = -15;
         let birdLiftSpeed = lift;
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
         let maxAngle = 90;
-        let rotationSpeed = 0.025; // Уменьшена скорость поворота в 2 раза
+        let rotationSpeed = 0.025; // Уменьшили скорость поворота в 2 раза
         let pipes = [];
         let pipeWidth = 80 * 1.5;
         let pipeGap = 250;
         let pipeSpeed = 3;
         let score = 0;
+        let airCoins = 0;
+        let releaseTimer = 0;
+        let releaseDelay = 30; // Задержка после отпускания кнопки в 0.5 секунд (60 FPS / 2)
 
         const birdImg = new Image();
         birdImg.src = 'assets/camokyr.png';
@@ -109,6 +111,7 @@
         function startHold() {
             if (!isGameOver) {
                 isHolding = true;
+                releaseTimer = 0;
             }
         }
 
@@ -132,10 +135,15 @@
 
         function updateGame() {
             if (isHolding) {
-                birdLiftSpeed = Math.max(birdLiftSpeed - 0.1, maxLift);
+                birdLiftSpeed = Math.max(birdLiftSpeed - 0.2, maxLift);
                 birdSpeed = birdLiftSpeed;
+                releaseTimer = 0; // Сбрасываем таймер задержки
             } else {
-                birdSpeed += gravity;
+                if (releaseTimer < releaseDelay) {
+                    releaseTimer++;
+                } else {
+                    birdSpeed += gravity;
+                }
             }
 
             birdY += birdSpeed;
@@ -161,6 +169,7 @@
                 if (pipe.x + pipeWidth < 0) {
                     pipes.splice(index, 1);
                     score++;
+                    airCoins = score * 500; // Счёт умножаем на 500
                 }
             });
         }
@@ -182,28 +191,20 @@
 
             ctx.fillStyle = "black";
             ctx.font = "24px Arial";
-            ctx.fillText("Score: " + score, 10, 30);
+            ctx.fillText("Score: " + score, canvas.width / 2 - 50, 30); // Центрируем счёт
         }
 
         function endGame() {
             isGameOver = true;
-            let airCoins = score * 500;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем экран перед выводом сообщения о конце игры
-
-            ctx.fillStyle = "red";
-            ctx.font = "48px Arial";
-            ctx.textAlign = "center"; // Центрируем текст
-            ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 60);
-
-            ctx.font = "24px Arial";
-            ctx.fillText("Score: " + score, canvas.width / 2, canvas.height / 2);
-            ctx.fillText("AirCoins earned: " + airCoins, canvas.width / 2, canvas.height / 2 + 40);
-
-            restartButton.style.display = "block";
+            // Отображаем счёт и AirCoins
+            scoreDisplay.innerHTML = "Score: " + score;
+            airCoinsDisplay.innerHTML = "AirCoins earned: " + airCoins;
+            gameOverScreen.style.display = "block";
         }
 
-        restartButton.addEventListener("click", function() {
+        restartButton.addEventListener("click", () => {
+            gameOverScreen.style.display = "none";
             restartGame();
         });
 
@@ -212,9 +213,9 @@
             birdSpeed = 0;
             pipes = [];
             score = 0;
+            airCoins = 0;
             isGameOver = false;
             angle = 0;
-            restartButton.style.display = "none";
         }
 
         gameLoop();
