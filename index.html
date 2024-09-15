@@ -3,15 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird - Paper Plane Physics</title>
+    <title>Flappy Bird - Responsive</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
+
         canvas {
-            display: block;
             background-color: #70c5ce;
+        }
+
+        /* Для мобильных устройств делаем канвас на весь экран */
+        @media (max-width: 768px) {
+            canvas {
+                width: 100vw;
+                height: 100vh;
+            }
+        }
+
+        /* Для компьютеров фиксируем размеры игры и центрируем */
+        @media (min-width: 769px) {
+            canvas {
+                width: 414px; /* Примерно ширина экрана мобильного устройства 6,1 дюймов */
+                height: 896px; /* Примерно высота экрана мобильного устройства 6,1 дюймов */
+            }
         }
     </style>
 </head>
@@ -21,16 +41,20 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        // Пропорции для экрана 6,1 дюймов (например, iPhone XR)
-        const screenWidth = 828;
-        const screenHeight = 1792;
-
-        // Устанавливаем размеры canvas для мобильного формата
+        // Обновляем размеры canvas в зависимости от устройства
         function resizeCanvas() {
-            canvas.width = screenWidth;
-            canvas.height = screenHeight;
+            if (window.innerWidth < 769) {
+                // Мобильные устройства — канвас на весь экран
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            } else {
+                // Компьютеры — фиксированные размеры
+                canvas.width = 414; // Примерно ширина экрана 6,1 дюймов
+                canvas.height = 896; // Примерно высота экрана 6,1 дюймов
+            }
         }
-        resizeCanvas(); // Устанавливаем размер при загрузке страницы
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
         // Параметры птицы
         let birdX = 50;
@@ -52,7 +76,7 @@
 
         // Загрузка изображения для птицы
         const birdImg = new Image();
-        birdImg.src = 'assets/camokyr.png'; // Собственная моделька самолётика
+        birdImg.src = 'assets/camoletik.png'; // Собственная моделька самолётика
 
         // Добавление труб
         function addPipe() {
