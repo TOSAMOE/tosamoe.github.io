@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Physics</title>
+    <title>woww</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             display: flex;
-            justify-content: center; 
-            align-items: center; 
+            justify-content: center;
+            align-items: center;
             height: 100vh;
             font-family: Arial, sans-serif;
         }
@@ -75,20 +75,21 @@
 
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40 * 2;
-        let gravity = 0.2;
+        let birdWidth = 60;
+        let birdHeight = 40;
+        let gravity = 0.25;
         let birdSpeed = 0;
-        let lift = -4; // Начальная подъёмная сила
-        let maxLift = -15; // Максимальная подъёмная сила при удержании
-        let liftIncreaseRate = 0.1; // Скорость увеличения подъёмной силы при удержании
-        let currentLift = lift; // Текущая подъёмная сила
+        let lift = -3;
+        let maxLift = -12;
+        let liftIncreaseRate = 0.2;
+        let currentLift = lift;
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 75; 
-        let minAngle = -60; 
-        let baseRotationSpeed = 0.03; 
-        let currentRotationSpeed = baseRotationSpeed; 
+        let maxAngle = 75;
+        let minAngle = -60;
+        let baseRotationSpeed = 0.03;
+        let currentRotationSpeed = baseRotationSpeed;
         let pipes = [];
         let pipeWidth = 80 * 1.5;
         let pipeGap = 250;
@@ -96,10 +97,10 @@
         let score = 0;
         let airCoins = 0;
         let releaseTimer = 0;
-        let releaseDelay = 30;
+        let releaseDelay = 15;
 
         const birdImg = new Image();
-        birdImg.src = 'assets/camokyr.png';
+        birdImg.src = 'assets/camokyr.png'; // Замените путь на свой путь к изображению
 
         function addPipe() {
             let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);
@@ -115,7 +116,7 @@
             if (!isGameOver) {
                 isHolding = true;
                 releaseTimer = 0;
-                currentLift = lift; // Сброс подъёмной силы при новом нажатии
+                currentLift = lift;
             }
         }
 
@@ -138,12 +139,12 @@
 
         function updateGame() {
             if (isHolding) {
-                currentLift = Math.max(currentLift - liftIncreaseRate, maxLift); // Увеличиваем подъёмную силу до максимума
-                birdSpeed = currentLift; 
+                currentLift = Math.max(currentLift - liftIncreaseRate, maxLift);
+                birdSpeed = currentLift;
             } else {
                 if (releaseTimer < releaseDelay) {
                     releaseTimer++;
-                    birdSpeed *= 0.95;
+                    birdSpeed *= 0.9;
                 } else {
                     birdSpeed += gravity;
                 }
@@ -158,20 +159,21 @@
                 targetAngle = minAngle;
             }
 
-            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle)); 
+            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle));
             angle += (targetAngle - angle) * currentRotationSpeed;
 
-            if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
+            if (birdY + birdHeight > canvas.height || birdY - birdHeight < 0) {
                 endGame();
             }
 
             pipes.forEach((pipe, index) => {
                 pipe.x -= pipeSpeed;
 
+                // Хитбокс проверки столкновений
                 if (
-                    birdX + birdSize / 2 > pipe.x &&
-                    birdX - birdSize / 2 < pipe.x + pipeWidth &&
-                    (birdY - birdSize / 2 < pipe.topHeight || birdY + birdSize / 2 > pipe.bottomY)
+                    birdX + birdWidth / 2 > pipe.x &&
+                    birdX - birdWidth / 2 < pipe.x + pipeWidth &&
+                    (birdY - birdHeight / 2 < pipe.topHeight || birdY + birdHeight / 2 > pipe.bottomY)
                 ) {
                     endGame();
                 }
@@ -191,17 +193,26 @@
                 ctx.fillStyle = "#228B22";
                 ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
                 ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
+
+                // Рисуем хитбоксы для труб
+                ctx.strokeStyle = "red";
+                ctx.strokeRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+                ctx.strokeRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
             });
 
             ctx.save();
             ctx.translate(birdX, birdY);
             ctx.rotate(angle * Math.PI / 180);
 
+            // Рисуем хитбокс для самолёта
+            ctx.strokeStyle = "blue";
+            ctx.strokeRect(-birdWidth / 2, -birdHeight / 2, birdWidth, birdHeight);
+
             if (birdImg.complete && birdImg.naturalHeight !== 0) {
-                ctx.drawImage(birdImg, -birdSize / 2, -birdSize / 2, birdSize, birdSize);
+                ctx.drawImage(birdImg, -birdWidth / 2, -birdHeight / 2, birdWidth, birdHeight);
             } else {
                 ctx.fillStyle = "gray";
-                ctx.fillRect(-birdSize / 2, -birdSize / 2, birdSize, birdSize);
+                ctx.fillRect(-birdWidth / 2, -birdHeight / 2, birdWidth, birdHeight);
             }
 
             ctx.restore();
@@ -234,4 +245,3 @@
     </script>
 </body>
 </html>
-
