@@ -9,8 +9,8 @@
             margin: 0;
             overflow: hidden;
             display: flex;
-            justify-content: center; /* Центрируем по горизонтали */
-            align-items: center; /* Центрируем по вертикали */
+            justify-content: center;
+            align-items: center;
             height: 100vh;
             font-family: Arial, sans-serif;
         }
@@ -78,15 +78,13 @@
         let birdSize = 40 * 2;
         let gravity = 0.2;
         let birdSpeed = 0;
-        let lift = -4; // Подъёмная сила
-        let maxLift = -10; // Максимальная подъёмная сила при удержании
+        let lift = -4; 
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 75; // Увеличиваем максимальный угол при падении до 75 градусов
-        let minAngle = -60; // Максимальный угол при взлёте
-        let baseRotationSpeed = 0.03; // Базовая скорость поворота
-        let currentRotationSpeed = baseRotationSpeed; // Текущая скорость поворота
+        let maxAngle = 75; 
+        let minAngle = -60; 
+        let baseRotationSpeed = 0.03;
         let pipes = [];
         let pipeWidth = 80 * 1.5;
         let pipeGap = 250;
@@ -94,20 +92,12 @@
         let score = 0;
         let airCoins = 0;
         let releaseTimer = 0;
-        let releaseDelay = 30; // Задержка 0,5 секунд перед началом падения
+        let releaseDelay = 30;
 
         const birdImg = new Image();
         birdImg.src = 'assets/camokyr.png';
         birdImg.onload = () => {
             console.log("Image loaded successfully");
-        };
-        birdImg.onerror = () => {
-            console.error("Failed to load image.");
-            ctx.fillStyle = "red";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            ctx.font = "24px Arial";
-            ctx.fillText("Failed to load bird image", 50, 50);
         };
 
         function addPipe() {
@@ -123,9 +113,8 @@
         function startHold() {
             if (!isGameOver) {
                 isHolding = true;
-                birdSpeed = lift; // При удержании применяем подъёмную силу
+                birdSpeed = lift;
                 releaseTimer = 0;
-                currentRotationSpeed = baseRotationSpeed; // Восстанавливаем скорость поворота при начале взлёта
             }
         }
 
@@ -146,42 +135,15 @@
             requestAnimationFrame(gameLoop);
         }
 
-        function isCollidingWithBird(pipe) {
-            // Определяем форму хитбокса самолета
-            ctx.save();
-            ctx.translate(birdX, birdY);
-            ctx.rotate(angle * Math.PI / 180);
-            
-            // Хитбокс самолёта (широкий треугольник)
-            ctx.strokeStyle = "blue";
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(birdSize / 2, 0);                    // Нос самолёта (центр)
-            ctx.lineTo(-birdSize / 2, birdSize / 2);        // Нижняя часть, левее центра
-            ctx.lineTo(-birdSize / 2, -birdSize / 2);       // Верхняя часть, левее центра
-            ctx.closePath();
-            ctx.stroke(); // Рисуем хитбокс самолёта
-
-            
-            // Проверка на столкновение с трубой
-            const hit = ctx.isPointInPath(pipe.x, pipe.topHeight) || 
-                        ctx.isPointInPath(pipe.x, pipe.bottomY) || 
-                        ctx.isPointInPath(pipe.x + pipeWidth, pipe.topHeight) || 
-                        ctx.isPointInPath(pipe.x + pipeWidth, pipe.bottomY);
-            
-            ctx.restore();
-            return hit;
-        }
-
         function updateGame() {
             if (isHolding) {
                 birdSpeed = lift;
             } else {
                 if (releaseTimer < releaseDelay) {
                     releaseTimer++;
-                    birdSpeed *= 0.95; // Постепенно замедляем подъём
+                    birdSpeed *= 0.95;
                 } else {
-                    birdSpeed += gravity; // После задержки начинает действовать гравитация
+                    birdSpeed += gravity;
                 }
             }
 
@@ -189,15 +151,12 @@
 
             let targetAngle;
             if (birdSpeed > 0) {
-                // Когда падает, угол вниз (нос вниз)
                 targetAngle = maxAngle;
             } else {
-                // Когда взлетает, угол вверх (нос вверх)
                 targetAngle = minAngle;
             }
 
-            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle)); 
-            angle += (targetAngle - angle) * currentRotationSpeed;
+            angle += (targetAngle - angle) * baseRotationSpeed;
 
             if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
                 endGame();
@@ -206,7 +165,11 @@
             pipes.forEach((pipe, index) => {
                 pipe.x -= pipeSpeed;
 
-                if (isCollidingWithBird(pipe)) {
+                if (
+                    birdX + birdSize / 2 > pipe.x &&
+                    birdX - birdSize / 2 < pipe.x + pipeWidth &&
+                    (birdY - birdSize / 2 < pipe.topHeight || birdY + birdSize / 2 > pipe.bottomY)
+                ) {
                     endGame();
                 }
 
@@ -226,11 +189,11 @@
                 ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
                 ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
 
-                // Отрисовка хитбоксов труб
+                // Хитбоксы труб
                 ctx.strokeStyle = "red";
                 ctx.lineWidth = 2;
-                ctx.strokeRect(pipe.x, 0, pipeWidth, pipe.topHeight); // Верхняя труба
-                ctx.strokeRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY); // Нижняя труба
+                ctx.strokeRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+                ctx.strokeRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
             });
 
             ctx.save();
@@ -244,13 +207,13 @@
                 ctx.fillRect(-birdSize / 2, -birdSize / 2, birdSize, birdSize);
             }
 
-            // Отрисовка хитбокса самолёта
+            // Хитбокс самолёта (широкий треугольник)
             ctx.strokeStyle = "blue";
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(-birdSize / 2, -birdSize / 4); // Верхняя часть самолёта
-            ctx.lineTo(birdSize / 2, 0);              // Нос самолёта
-            ctx.lineTo(-birdSize / 2, birdSize / 4);  // Нижняя часть самолёта
+            ctx.moveTo(birdSize / 2, 0);                    // Нос самолёта (центр)
+            ctx.lineTo(-birdSize / 2, birdSize / 2);        // Нижняя часть, левее центра
+            ctx.lineTo(-birdSize / 2, -birdSize / 2);       // Верхняя часть, левее центра
             ctx.closePath();
             ctx.stroke(); // Рисуем хитбокс самолёта
 
