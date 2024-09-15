@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AirCoin Bird</title>
+    <title>Flappy Bird - Paper Plane Physics</title>
     <style>
         body {
             margin: 0;
@@ -96,8 +96,20 @@
         let releaseTimer = 0;
         let releaseDelay = 30; // Задержка 0,5 секунд перед началом падения
 
+        // Проверяем загружено ли изображение и добавляем отладку
         const birdImg = new Image();
-        birdImg.src = 'assets/c  plane.png';
+        birdImg.src = 'assets/camokyr.png'; // Убедитесь, что путь к изображению правильный
+        birdImg.onload = () => {
+            console.log("Image loaded successfully");
+        };
+        birdImg.onerror = () => {
+            console.error("Failed to load image.");
+            ctx.fillStyle = "red";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.font = "24px Arial";
+            ctx.fillText("Failed to load bird image", 50, 50);
+        };
 
         function addPipe() {
             let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);
@@ -137,10 +149,8 @@
 
         function updateGame() {
             if (isHolding) {
-                // Самолётик поднимается, пока удерживаем клик
                 birdSpeed = lift;
             } else {
-                // Самолётик замедляется и постепенно начинает падать
                 if (releaseTimer < releaseDelay) {
                     releaseTimer++;
                     birdSpeed *= 0.95; // Постепенно замедляем подъём
@@ -151,12 +161,10 @@
 
             birdY += birdSpeed;
 
-            // Параболическая логика вращения
             let targetAngle = birdSpeed > 0 ? minAngle : maxAngle;
-            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle)); // Скорость уменьшается по мере приближения к целевому углу
+            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle));
             angle += (targetAngle - angle) * currentRotationSpeed;
 
-            // Проверяем на выход за границы
             if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
                 endGame();
             }
@@ -192,9 +200,18 @@
             ctx.save();
             ctx.translate(birdX, birdY);
             ctx.rotate(angle * Math.PI / 180);
-            ctx.drawImage(birdImg, -birdSize / 2, -birdSize / 2, birdSize, birdSize);
+
+            // Рисуем изображение самолёта только если оно загружено
+            if (birdImg.complete && birdImg.naturalHeight !== 0) {
+                ctx.drawImage(birdImg, -birdSize / 2, -birdSize / 2, birdSize, birdSize);
+            } else {
+                // Рисуем замену, если изображение не загружено
+                ctx.fillStyle = "gray";
+                ctx.fillRect(-birdSize / 2, -birdSize / 2, birdSize, birdSize);
+            }
             ctx.restore();
 
+            // Отображаем счёт
             ctx.fillStyle = "black";
             ctx.font = "24px Arial";
             ctx.fillText("Score: " + score, canvas.width / 2 - 50, 30);
