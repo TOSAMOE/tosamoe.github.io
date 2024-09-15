@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird - Paper Plane Physics</title>
+    <title>Paper Plane Physics</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             display: flex;
-            justify-content center;
-            align-items: center;
+            justify-content: center; /* Центрируем по горизонтали */
+            align-items: center; /* Центрируем по вертикали */
             height: 100vh;
             font-family: Arial, sans-serif;
         }
@@ -83,7 +83,7 @@
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 45; // Максимальный угол при падении
+        let maxAngle = 75; // Увеличиваем максимальный угол при падении до 75 градусов
         let minAngle = -45; // Максимальный угол при взлёте
         let baseRotationSpeed = 0.03; // Базовая скорость поворота
         let currentRotationSpeed = baseRotationSpeed; // Текущая скорость поворота
@@ -239,7 +239,6 @@
             birdSpeed = 0;
             pipes = [];
             score = 0;
-;
             airCoins = 0;
             isGameOver = false;
             angle = 0;
