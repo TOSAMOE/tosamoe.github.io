@@ -76,17 +76,17 @@
         let birdX = 50;
         let birdY = canvas.height / 2;
         let birdSize = 40 * 2;
-        let gravity = 0.2; // Уменьшили гравитацию для более плавного движения
+        let gravity = 0.2; // Гравитация
         let birdSpeed = 0;
-        let lift = -1; // Подъёмная сила для бумажного самолётика
+        let lift = -1; // Подъёмная сила
         let maxLift = -7; // Максимальная подъёмная сила
         let birdLiftSpeed = lift;
-        let drag = 0.02; // Добавлено сопротивление воздуха
+        let drag = 0.04; // Увеличено сопротивление для быстрого замедления
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
         let maxAngle = 90;
-        let rotationSpeed = 0.015; // Уменьшена скорость поворота для плавного планирования
+        let rotationSpeed = 0.015; // Медленный поворот
         let pipes = [];
         let pipeWidth = 80 * 1.5;
         let pipeGap = 250;
@@ -94,7 +94,7 @@
         let score = 0;
         let airCoins = 0;
         let releaseTimer = 0;
-        let releaseDelay = 30;
+        let releaseDelay = 30; // Задержка 0,5 секунд перед падением
 
         const birdImg = new Image();
         birdImg.src = 'assets/camokyr.png';
@@ -136,16 +136,18 @@
 
         function updateGame() {
             if (isHolding) {
+                // При удержании клика поднимаем самолётик
                 birdLiftSpeed = Math.max(birdLiftSpeed - 0.2, maxLift);
                 birdSpeed = birdLiftSpeed;
                 releaseTimer = 0;
             } else {
+                // После отпускания клика происходит замедление
                 if (releaseTimer < releaseDelay) {
                     releaseTimer++;
+                    birdSpeed -= drag; // Быстрое снижение скорости при отпускании
                 } else {
-                    birdSpeed += gravity;
+                    birdSpeed += gravity; // После 0.5 секунд начинает работать гравитация
                 }
-                birdSpeed -= drag; // Добавляем сопротивление воздуха
             }
 
             birdY += birdSpeed;
