@@ -93,7 +93,8 @@
         let score = 0;
         let airCoins = 0;
         let releaseTimer = 0;
-        let releaseDelay = 30; // Задержка после отпускания кнопки в 0.5 секунд (60 FPS / 2)
+        let releaseDelay = 30; // Задержка в 0.5 секунд (60 FPS / 2)
+        let pauseDuration = 0.5 * 60; // Задержка на 0,5 секунд в кадрах (60 FPS)
 
         const birdImg = new Image();
         birdImg.src = 'assets/camokyr.png';
@@ -118,6 +119,7 @@
         function endHold() {
             isHolding = false;
             birdLiftSpeed = lift;
+            releaseTimer = pauseDuration; // Устанавливаем таймер на паузу после отпускания
         }
 
         window.addEventListener("mousedown", startHold);
@@ -134,15 +136,17 @@
         }
 
         function updateGame() {
+            // Если удерживается нажатие, самолёт поднимается
             if (isHolding) {
                 birdLiftSpeed = Math.max(birdLiftSpeed - 0.2, maxLift);
                 birdSpeed = birdLiftSpeed;
                 releaseTimer = 0; // Сбрасываем таймер задержки
             } else {
-                if (releaseTimer < releaseDelay) {
-                    releaseTimer++;
+                // Если задержка ещё не закончилась, самолёт замер в воздухе
+                if (releaseTimer > 0) {
+                    releaseTimer--;
                 } else {
-                    birdSpeed += gravity;
+                    birdSpeed += gravity; // Начинаем падение после паузы
                 }
             }
 
