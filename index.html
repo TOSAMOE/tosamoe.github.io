@@ -77,16 +77,16 @@
         let birdX = 50;
         let birdY = canvas.height / 2;
         let birdSize = 40 * 2;
-        let gravity = 0.2; // Уменьшена сила гравитации для более медленного падения
+        let gravity = 0.2;
         let birdSpeed = 0;
-        let lift = -0.1; // Более медленное увеличение подъёмной силы
-        let maxLift = -6; // Максимальная скорость подъёма уменьшена
+        let lift = -0.1;
+        let maxLift = -6;
         let birdLiftSpeed = lift;
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 90; // Угол поворота увеличен до 90 градусов при падении
-        let rotationSpeed = 0.05;
+        let maxAngle = 90;
+        let rotationSpeed = 0.025; // Уменьшена скорость поворота в 2 раза
         let pipes = [];
         let pipeWidth = 80 * 1.5;
         let pipeGap = 250;
@@ -131,17 +131,15 @@
         }
 
         function updateGame() {
-            // Если удерживается нажатие, увеличиваем подъёмную силу постепенно
             if (isHolding) {
-                birdLiftSpeed = Math.max(birdLiftSpeed - 0.1, maxLift); // Медленно набираем подъёмную скорость
+                birdLiftSpeed = Math.max(birdLiftSpeed - 0.1, maxLift);
                 birdSpeed = birdLiftSpeed;
             } else {
-                birdSpeed += gravity; // Плавное падение
+                birdSpeed += gravity;
             }
 
             birdY += birdSpeed;
 
-            // Поворот самолётика в зависимости от скорости, увеличенный до 90 градусов при падении
             let targetAngle = birdSpeed > 0 ? maxAngle : -maxAngle;
             angle += (targetAngle - angle) * rotationSpeed;
 
@@ -191,12 +189,16 @@
             isGameOver = true;
             let airCoins = score * 500;
 
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем экран перед выводом сообщения о конце игры
+
             ctx.fillStyle = "red";
             ctx.font = "48px Arial";
-            ctx.fillText("Game Over!", canvas.width / 2 - 150, canvas.height / 2 - 60);
+            ctx.textAlign = "center"; // Центрируем текст
+            ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 60);
+
             ctx.font = "24px Arial";
-            ctx.fillText("Score: " + score, canvas.width / 2 - 50, canvas.height / 2);
-            ctx.fillText("AirCoins earned: " + airCoins, canvas.width / 2 - 100, canvas.height / 2 + 40);
+            ctx.fillText("Score: " + score, canvas.width / 2, canvas.height / 2);
+            ctx.fillText("AirCoins earned: " + airCoins, canvas.width / 2, canvas.height / 2 + 40);
 
             restartButton.style.display = "block";
         }
