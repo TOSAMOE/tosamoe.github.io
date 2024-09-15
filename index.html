@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>woww</title>
+    <title>Paper Plane Physics</title>
     <style>
         body {
             margin: 0;
@@ -86,8 +86,8 @@
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 75;
-        let minAngle = -60;
+        let maxAngle = 90; // Увеличили максимальный угол
+        let minAngle = -75; // Увеличили минимальный угол
         let baseRotationSpeed = 0.03;
         let currentRotationSpeed = baseRotationSpeed;
         let pipes = [];
@@ -98,9 +98,14 @@
         let airCoins = 0;
         let releaseTimer = 0;
         let releaseDelay = 15;
+        let normalSpeed = pipeSpeed;
+        let boostSpeed = 6;
+        let accelerationDuration = 10; // Плавное изменение скорости в течение 0.1 секунды (10 кадров)
+        let accelerationStep = (boostSpeed - pipeSpeed) / accelerationDuration;
+        let decelerationStep = (pipeSpeed - boostSpeed) / accelerationDuration;
 
         const birdImg = new Image();
-        birdImg.src = 'assets/camokyr.png'; // Замените путь на свой путь к изображению
+        birdImg.src = '/mnt/data/camokyr.png'; // Замените путь на свой путь к изображению
 
         function addPipe() {
             let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);
@@ -117,11 +122,37 @@
                 isHolding = true;
                 releaseTimer = 0;
                 currentLift = lift;
+                acceleratePlane(); // Начинаем плавно ускоряться
             }
         }
 
         function endHold() {
             isHolding = false;
+            deceleratePlane(); // Начинаем плавно замедляться
+        }
+
+        function acceleratePlane() {
+            let frame = 0;
+            function accelerate() {
+                if (frame < accelerationDuration) {
+                    pipeSpeed += accelerationStep;
+                    frame++;
+                    requestAnimationFrame(accelerate);
+                }
+            }
+            accelerate();
+        }
+
+        function deceleratePlane() {
+            let frame = 0;
+            function decelerate() {
+                if (frame < accelerationDuration) {
+                    pipeSpeed -= decelerationStep;
+                    frame++;
+                    requestAnimationFrame(decelerate);
+                }
+            }
+            decelerate();
         }
 
         window.addEventListener("mousedown", startHold);
@@ -162,14 +193,14 @@
             currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle));
             angle += (targetAngle - angle) * currentRotationSpeed;
 
-            if (birdY + birdHeight > canvas.height || birdY - birdHeight < 0) {
+            // Добавляем больше пространства сверху и снизу
+            if (birdY + birdHeight > canvas.height - 50 || birdY - birdHeight < 50) {
                 endGame();
             }
 
             pipes.forEach((pipe, index) => {
                 pipe.x -= pipeSpeed;
 
-                // Хитбокс проверки столкновений
                 if (
                     birdX + birdWidth / 2 > pipe.x &&
                     birdX - birdWidth / 2 < pipe.x + pipeWidth &&
@@ -245,3 +276,4 @@
     </script>
 </body>
 </html>
+
