@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HITBOXES</title>
+    <title>Paper Plane Physics</title>
     <style>
         body {
             margin: 0;
@@ -78,7 +78,7 @@
         let birdSize = 40 * 2;
         let gravity = 0.2;
         let birdSpeed = 0;
-        let lift = -4; 
+        let lift = -0.15; // Изменен для плавного взлета
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
@@ -113,7 +113,6 @@
         function startHold() {
             if (!isGameOver) {
                 isHolding = true;
-                birdSpeed = lift;
                 releaseTimer = 0;
             }
         }
@@ -137,14 +136,10 @@
 
         function updateGame() {
             if (isHolding) {
-                birdSpeed = lift;
+                birdSpeed += lift;
+                birdSpeed = Math.max(birdSpeed, lift * 10); // Ограничение для скорости подъема
             } else {
-                if (releaseTimer < releaseDelay) {
-                    releaseTimer++;
-                    birdSpeed *= 0.95;
-                } else {
-                    birdSpeed += gravity;
-                }
+                birdSpeed += gravity;
             }
 
             birdY += birdSpeed;
@@ -158,7 +153,7 @@
 
             angle += (targetAngle - angle) * baseRotationSpeed;
 
-            if (birdY + birdSize > canvas.height || birdY - birdSize < 0) {
+            if (birdY + birdSize / 2 > canvas.height || birdY - birdSize / 2 < 0) {
                 endGame();
             }
 
@@ -207,13 +202,13 @@
                 ctx.fillRect(-birdSize / 2, -birdSize / 2, birdSize, birdSize);
             }
 
-            // Хитбокс самолёта (широкий треугольник)
+            // Хитбокс самолёта (точная форма)
             ctx.strokeStyle = "blue";
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(birdSize / 2, 0);                    // Нос самолёта (центр)
-            ctx.lineTo(-birdSize / 2, birdSize / 2);        // Нижняя часть, левее центра
-            ctx.lineTo(-birdSize / 2, -birdSize / 2);       // Верхняя часть, левее центра
+            ctx.moveTo(-birdSize / 2, -birdSize / 4); // Левый верхний угол
+            ctx.lineTo(birdSize / 2, 0);              // Нос
+            ctx.lineTo(-birdSize / 2, birdSize / 4);  // Левый нижний угол
             ctx.closePath();
             ctx.stroke(); // Рисуем хитбокс самолёта
 
