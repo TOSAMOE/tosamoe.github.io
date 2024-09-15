@@ -77,15 +77,15 @@
         let birdX = 50;
         let birdY = canvas.height / 2;
         let birdSize = 40 * 2;
-        let gravity = 0.4;
+        let gravity = 0.2; // Уменьшена сила гравитации для более медленного падения
         let birdSpeed = 0;
-        let lift = -2;
-        let maxLift = -15;
+        let lift = -0.1; // Более медленное увеличение подъёмной силы
+        let maxLift = -6; // Максимальная скорость подъёма уменьшена
         let birdLiftSpeed = lift;
         let isHolding = false;
         let isGameOver = false;
         let angle = 0;
-        let maxAngle = 25;
+        let maxAngle = 90; // Угол поворота увеличен до 90 градусов при падении
         let rotationSpeed = 0.05;
         let pipes = [];
         let pipeWidth = 80 * 1.5;
@@ -131,14 +131,17 @@
         }
 
         function updateGame() {
+            // Если удерживается нажатие, увеличиваем подъёмную силу постепенно
             if (isHolding) {
-                birdLiftSpeed = Math.max(birdLiftSpeed - 0.2, maxLift);
+                birdLiftSpeed = Math.max(birdLiftSpeed - 0.1, maxLift); // Медленно набираем подъёмную скорость
                 birdSpeed = birdLiftSpeed;
             } else {
-                birdSpeed += gravity;
+                birdSpeed += gravity; // Плавное падение
             }
 
             birdY += birdSpeed;
+
+            // Поворот самолётика в зависимости от скорости, увеличенный до 90 градусов при падении
             let targetAngle = birdSpeed > 0 ? maxAngle : -maxAngle;
             angle += (targetAngle - angle) * rotationSpeed;
 
