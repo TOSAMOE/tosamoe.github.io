@@ -59,7 +59,7 @@
         // Параметры птицы
         let birdX = 50;
         let birdY = canvas.height / 2;
-        let birdSize = 40 * 2.5; // Увеличиваем размер птицы в 2,5 раза
+        let birdSize = 40 * 2; // Увеличиваем размер птицы в 2 раза
         let gravity = 0.4;
         let birdSpeed = 0;
         let lift = -8;
@@ -70,13 +70,13 @@
         let isGameOver = false;
         let score = 0;
         let pipes = [];
-        let pipeWidth = 80 * 2; // Увеличиваем ширину труб в 2 раза
+        let pipeWidth = 80 * 1.5; // Увеличиваем ширину труб в 1.5 раза
         let pipeGap = 250 + 100; // Увеличиваем щель между трубами на 100px
         let pipeSpeed = 3;
 
         // Загрузка изображения для птицы
         const birdImg = new Image();
-        birdImg.src = 'assets/camoletik.png'; // Собственная моделька самолётика
+        birdImg.src = 'assets/camobuma.png'; // Собственная моделька самолётика
 
         // Добавление труб
         function addPipe() {
