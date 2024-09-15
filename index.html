@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Plane Physics</title>
+    <title>HITBOXES</title>
     <style>
         body {
             margin: 0;
@@ -221,6 +221,12 @@
                 ctx.fillStyle = "#228B22";
                 ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
                 ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
+
+                // Отрисовка хитбоксов труб
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(pipe.x, 0, pipeWidth, pipe.topHeight); // Верхняя труба
+                ctx.strokeRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY); // Нижняя труба
             });
 
             ctx.save();
@@ -233,34 +239,42 @@
                 ctx.fillStyle = "gray";
                 ctx.fillRect(-birdSize / 2, -birdSize / 2, birdSize, birdSize);
             }
+
+            // Отрисовка хитбокса самолёта
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(-birdSize / 2, -birdSize / 4); // Верхняя часть самолёта
+            ctx.lineTo(birdSize / 2, 0);              // Нос самолёта
+            ctx.lineTo(-birdSize / 2, birdSize / 4);  // Нижняя часть самолёта
+            ctx.closePath();
+            ctx.stroke(); // Рисуем хитбокс самолёта
+
             ctx.restore();
 
             ctx.fillStyle = "black";
             ctx.font = "24px Arial";
-            ctx.fillText("Score: " + score, canvas.width / 2 - 50, 30);
+            ctx.fillText("Score: " + score, 10, 30);
+            ctx.fillText("Air Coins: " + airCoins, 10, 60);
         }
 
         function endGame() {
             isGameOver = true;
-
-            scoreDisplay.innerHTML = "Score: " + score;
-            airCoinsDisplay.innerHTML = "AirCoins earned: " + airCoins;
             gameOverScreen.style.display = "block";
+            scoreDisplay.innerText = `Your Score: ${score}`;
+            airCoinsDisplay.innerText = `Air Coins: ${airCoins}`;
         }
 
-        restartButton.addEventListener("click", () => {
-            gameOverScreen.style.display = "none";
-            restartGame();
-        });
-
-        function restartGame() {
+        restartButton.addEventListener("click", function () {
+            birdX = 50;
             birdY = canvas.height / 2;
             birdSpeed = 0;
             pipes = [];
             score = 0;
             airCoins = 0;
             isGameOver = false;
-        }
+            gameOverScreen.style.display = "none";
+        });
 
         gameLoop();
     </script>
