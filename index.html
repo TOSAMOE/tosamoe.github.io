@@ -152,12 +152,16 @@
             ctx.translate(birdX, birdY);
             ctx.rotate(angle * Math.PI / 180);
             
-            // Определяем фигуру хитбокса самолёта в форме стрелки
+            // Хитбокс самолёта (широкий треугольник)
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(-birdSize / 2, -birdSize / 4); // Верхняя часть самолёта
-            ctx.lineTo(birdSize / 2, 0);              // Нос самолёта
-            ctx.lineTo(-birdSize / 2, birdSize / 4);  // Нижняя часть самолёта
+            ctx.moveTo(birdSize / 2, 0);                    // Нос самолёта (центр)
+            ctx.lineTo(-birdSize / 2, birdSize / 2);        // Нижняя часть, левее центра
+            ctx.lineTo(-birdSize / 2, -birdSize / 2);       // Верхняя часть, левее центра
             ctx.closePath();
+            ctx.stroke(); // Рисуем хитбокс самолёта
+
             
             // Проверка на столкновение с трубой
             const hit = ctx.isPointInPath(pipe.x, pipe.topHeight) || 
