@@ -1,0 +1,75 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  background: linear-gradient(to bottom, black, blue);
+  color: white;
+  text-align: center;
+}
+
+.coins-display {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+.coin-icon {
+  width: 30px;
+  vertical-align: middle;
+}
+
+.page {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.earn-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.plane-icon {
+  width: 100px;
+}
+
+.energy {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: space-around;
+  background-color: #333;
+  padding: 10px 0;
+}
+
+.nav-menu button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.nav-menu .active {
+  border-bottom: 2px solid white;
+}
+
