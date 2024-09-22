@@ -1,278 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paper Plane Physics</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-        }
-
-        canvas {
-            background-color: #70c5ce;
-        }
-
-        @media (max-width: 768px) {
-            canvas {
-                width: 100vw;
-                height: 100vh;
-            }
-        }
-
-        @media (min-width: 769px) {
-            canvas {
-                width: 414px;
-                height: 896px;
-            }
-        }
-
-        .game-over-screen {
-            position: absolute;
-            text-align: center;
-            color: red;
-            font-size: 24px;
-        }
-
-        .game-over-screen button {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hamster Kombat Tap to Earn</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="gameCanvas"></canvas>
-    <div id="gameOverScreen" class="game-over-screen" style="display:none;">
-        <div id="scoreDisplay"></div>
-        <div id="airCoinsDisplay"></div>
-        <button id="restartButton">Play Again</button>
+  <div class="container">
+    <!-- Top Section for Coins Display -->
+    <div class="coins-display">
+      <img src="coin-icon.png" alt="Coin" class="coin-icon">
+      <span id="coin-count">0</span>
     </div>
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const gameOverScreen = document.getElementById("gameOverScreen");
-        const scoreDisplay = document.getElementById("scoreDisplay");
-        const airCoinsDisplay = document.getElementById("airCoinsDisplay");
-        const restartButton = document.getElementById("restartButton");
 
-        function resizeCanvas() {
-            if (window.innerWidth < 769) {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            } else {
-                canvas.width = 414;
-                canvas.height = 896;
-            }
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+    <!-- Earn Page -->
+    <div class="page" id="earn-page">
+      <button class="earn-button" onclick="earnCoins()">
+        <img src="plane-icon.png" alt="Earn" class="plane-icon">
+      </button>
+      <p class="energy">Energy: <span id="energy-count">100</span></p>
+    </div>
 
-        let birdX = 50;
-        let birdY = canvas.height / 2;
-        let birdWidth = 60;
-        let birdHeight = 40;
-        let gravity = 0.25;
-        let birdSpeed = 0;
-        let lift = -3;
-        let maxLift = -8; // Уменьшили максимальную подъёмную силу для более плавного движения
-        let liftIncreaseRate = 0.1; // Уменьшили скорость увеличения подъёмной силы
-        let currentLift = lift;
-        let isHolding = false;
-        let isGameOver = false;
-        let angle = 0;
-        let maxAngle = 90;
-        let minAngle = -75;
-        let baseRotationSpeed = 0.03;
-        let currentRotationSpeed = baseRotationSpeed;
-        let pipes = [];
-        let pipeWidth = 80 * 1.5;
-        let pipeGap = 250;
-        let pipeSpeed = 3;
-        let score = 0;
-        let airCoins = 0;
-        let releaseTimer = 0;
-        let releaseDelay = 15;
-        let normalSpeed = pipeSpeed;
-        let boostSpeed = 4; // Уменьшили скорость ускорения
-        let accelerationDuration = 10;
-        let accelerationStep = (boostSpeed - pipeSpeed) / accelerationDuration;
-        let decelerationStep = (pipeSpeed - boostSpeed) / accelerationDuration;
+    <!-- Bottom Navigation Menu -->
+    <div class="nav-menu">
+      <button onclick="switchPage('profile-page')">Profile</button>
+      <button onclick="switchPage('tasks-page')">Tasks</button>
+      <button onclick="switchPage('earn-page')" class="active">Earn</button>
+      <button onclick="switchPage('boost-page')">Boost</button>
+    </div>
+  </div>
 
-        const birdImg = new Image();
-        birdImg.src = '/mnt/data/camokyr.png'; // Замените путь на свой путь к изображению
-
-        function addPipe() {
-            let pipeHeight = Math.random() * (canvas.height - pipeGap - 100);
-            pipes.push({
-                x: canvas.width,
-                topHeight: pipeHeight,
-                bottomY: pipeHeight + pipeGap
-            });
-        }
-        setInterval(addPipe, 3000);
-
-        function startHold() {
-            if (!isGameOver) {
-                isHolding = true;
-                releaseTimer = 0;
-                currentLift = lift;
-                acceleratePlane();
-            }
-        }
-
-        function endHold() {
-            isHolding = false;
-            deceleratePlane();
-        }
-
-        function acceleratePlane() {
-            let frame = 0;
-            function accelerate() {
-                if (frame < accelerationDuration) {
-                    pipeSpeed += accelerationStep;
-                    frame++;
-                    requestAnimationFrame(accelerate);
-                }
-            }
-            accelerate();
-        }
-
-        function deceleratePlane() {
-            let frame = 0;
-            function decelerate() {
-                if (frame < accelerationDuration) {
-                    pipeSpeed -= decelerationStep;
-                    frame++;
-                    requestAnimationFrame(decelerate);
-                }
-            }
-            decelerate();
-        }
-
-        window.addEventListener("mousedown", startHold);
-        window.addEventListener("mouseup", endHold);
-        window.addEventListener("touchstart", startHold);
-        window.addEventListener("touchend", endHold);
-
-        function gameLoop() {
-            if (!isGameOver) {
-                updateGame();
-                drawGame();
-            }
-            requestAnimationFrame(gameLoop);
-        }
-
-        function updateGame() {
-            if (isHolding) {
-                currentLift = Math.max(currentLift - liftIncreaseRate, maxLift);
-                birdSpeed = currentLift;
-            } else {
-                if (releaseTimer < releaseDelay) {
-                    releaseTimer++;
-                    birdSpeed *= 0.9;
-                } else {
-                    birdSpeed += gravity;
-                }
-            }
-
-            birdY += birdSpeed;
-
-            let targetAngle;
-            if (birdSpeed > 0) {
-                targetAngle = maxAngle;
-            } else {
-                targetAngle = minAngle;
-            }
-
-            currentRotationSpeed = baseRotationSpeed * (1 - Math.abs(angle / maxAngle));
-            angle += (targetAngle - angle) * currentRotationSpeed;
-
-            // Отодвигаем потолок и пол
-            if (birdY + birdHeight > canvas.height - 80 || birdY - birdHeight < 20) {
-                endGame();
-            }
-
-            pipes.forEach((pipe, index) => {
-                pipe.x -= pipeSpeed;
-
-                if (
-                    birdX + birdWidth / 2 > pipe.x &&
-                    birdX - birdWidth / 2 < pipe.x + pipeWidth &&
-                    (birdY - birdHeight / 2 < pipe.topHeight || birdY + birdHeight / 2 > pipe.bottomY)
-                ) {
-                    endGame();
-                }
-
-                if (pipe.x + pipeWidth < 0) {
-                    pipes.splice(index, 1);
-                    score++;
-                    airCoins = score * 500;
-                }
-            });
-        }
-
-        function drawGame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            pipes.forEach((pipe) => {
-                ctx.fillStyle = "#228B22";
-                ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-                ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
-
-                // Рисуем хитбоксы для труб
-                ctx.strokeStyle = "red";
-                ctx.strokeRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-                ctx.strokeRect(pipe.x, pipe.bottomY, pipeWidth, canvas.height - pipe.bottomY);
-            });
-
-            ctx.save();
-            ctx.translate(birdX, birdY);
-            ctx.rotate(angle * Math.PI / 180);
-
-            // Рисуем хитбокс для самолёта
-            ctx.strokeStyle = "blue";
-            ctx.strokeRect(-birdWidth / 2, -birdHeight / 2, birdWidth, birdHeight);
-
-            if (birdImg.complete && birdImg.naturalHeight !== 0) {
-                ctx.drawImage(birdImg, -birdWidth / 2, -birdHeight / 2, birdWidth, birdHeight);
-            } else {
-                ctx.fillStyle = "gray";
-                ctx.fillRect(-birdWidth / 2, -birdHeight / 2, birdWidth, birdHeight);
-            }
-
-            ctx.restore();
-
-            ctx.fillStyle = "black";
-            ctx.font = "24px Arial";
-            ctx.fillText("Score: " + score, 10, 30);
-            ctx.fillText("Air Coins: " + airCoins, 10, 60);
-        }
-
-        function endGame() {
-            isGameOver = true;
-            gameOverScreen.style.display = "block";
-            scoreDisplay.innerText = `Your Score: ${score}`;
-            airCoinsDisplay.innerText = `Air Coins: ${airCoins}`;
-        }
-
-        restartButton.addEventListener("click", function () {
-            birdX = 50;
-            birdY = canvas.height / 2;
-            birdSpeed = 0;
-            pipes = [];
-            score = 0;
-            airCoins = 0;
-            isGameOver = false;
-            gameOverScreen.style.display = "none";
-        });
-
-        gameLoop();
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
