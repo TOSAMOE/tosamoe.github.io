@@ -10,24 +10,39 @@
   <div class="container">
     <!-- Top Section for Coins Display -->
     <div class="coins-display">
-      <img src="coin.png" alt="Coin" class="coin-icon">
+      <img src="coin-icon.png" alt="Coin" class="coin-icon">
       <span id="coin-count">0</span>
     </div>
 
     <!-- Earn Page -->
     <div class="page" id="earn-page">
       <button class="earn-button" onclick="earnCoins()">
-        <img src="coin.png" alt="Earn" class="plane-icon">
+        <img src="plane-icon.png" alt="Earn" class="plane-icon">
       </button>
       <p class="energy">Energy: <span id="energy-count">100</span></p>
     </div>
 
     <!-- Bottom Navigation Menu -->
-    <div class="nav-menu">
-      <button onclick="switchPage('profile-page')">Profile</button>
-      <button onclick="switchPage('tasks-page')">Tasks</button>
-      <button onclick="switchPage('earn-page')" class="active">Earn</button>
-      <button onclick="switchPage('boost-page')">Boost</button>
+    <div class="nav-container">
+      <div class="nav-menu">
+        <button onclick="switchPage('tasks-page')">
+          <img src="tasks-icon.png" alt="Tasks" class="menu-icon">
+          <p>Tasks</p>
+        </button>
+        <button onclick="switchPage('profile-page')">
+          <img src="profile-icon.png" alt="Profile" class="menu-icon">
+          <p>Profile</p>
+        </button>
+        <button onclick="switchPage('earn-page')" class="active">
+          <img src="earn-icon.png" alt="Earn" class="menu-icon">
+          <p>Earn</p>
+        </button>
+      </div>
+
+      <!-- Boost Button (top-right corner) -->
+      <button class="boost-button">
+        <img src="boost-icon.png" alt="Boost" class="boost-icon">
+      </button>
     </div>
   </div>
 
