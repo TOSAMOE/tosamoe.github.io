@@ -21,12 +21,21 @@ body, html {
 
 .coins-display {
   margin-top: 20px;
-  font-size: 24px;
+  font-size: 30px;
+  font-weight: bold;
+  position: relative;
 }
 
 .coin-icon {
-  width: 30px;
+  width: 35px;
   vertical-align: middle;
+}
+
+.silver-level {
+  font-size: 14px;
+  font-weight: normal;
+  display: block;
+  margin-top: 5px;
 }
 
 .page {
@@ -45,11 +54,33 @@ body, html {
 }
 
 .plane-icon {
-  width: 100px;
+  width: 150px;
 }
 
 .energy {
-  margin-top: 20px;
+  margin-top: 10px;
+  font-size: 18px;
+  color: #888;
+}
+
+.progress-bar {
+  width: 80%;
+  height: 8px;
+  background: #555;
+  border-radius: 10px;
+  margin: 10px auto;
+  position: relative;
+}
+
+.progress-bar-fill {
+  width: 50%;
+  height: 100%;
+  background: #00f;
+  border-radius: 10px;
+}
+
+.goal-display {
+  margin-top: 10px;
   font-size: 18px;
 }
 
@@ -58,6 +89,7 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .nav-menu {
@@ -65,7 +97,7 @@ body, html {
   justify-content: space-around;
   background-color: #333;
   padding: 15px 0;
-  width: 80%;
+  width: 70%;
   border-radius: 20px;
 }
 
