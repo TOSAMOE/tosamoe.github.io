@@ -15,7 +15,7 @@
 
     <!-- Coins Section -->
     <div class="coins-display">
-      <img src="coin-icon.png" alt="Coin" class="coin-icon">
+      <img src="plane-icon.png" alt="Plane" class="coin-icon"> <!-- Замена на plane-icon -->
       <span id="coin-count">0</span>
     </div>
 
@@ -28,9 +28,9 @@
     <!-- Earn Page -->
     <div class="page" id="earn-page">
       <button class="earn-button" onclick="earnCoins()">
-        <img src="coin-icon.png" alt="Earn" class="central-coin-icon">
+        <img src="coin-icon.png" alt="Earn" class="central-coin-icon"> <!-- Центральная кнопка -->
       </button>
-      <p class="energy" id="energy-count">4000</p>
+      <p class="energy" id="energy-count">4000/4000</p> <!-- Отображаем и текущую и максимальную энергию -->
     </div>
 
     <!-- Bottom Navigation Menu -->
@@ -60,13 +60,14 @@
   <script>
     let coins = 0;
     let energy = 4000;
+    const maxEnergy = 4000;
 
     function earnCoins() {
       if (energy > 0) {
         energy--;
         coins++;
-        document.getElementById('energy-count').innerText = energy;
-        document.getElementById('coin-count').innerText = coins;
+        document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`; // Обновление счётчика энергии
+        document.getElementById('coin-count').innerText = coins; // Обновление счётчика монет
       }
     }
 
