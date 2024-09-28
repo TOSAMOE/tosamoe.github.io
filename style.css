@@ -27,24 +27,26 @@ body, html {
   font-weight: bold;
   position: relative;
   margin-bottom: 10px;
+  position: relative;
 }
 
 .coin-icon {
-  width: 50px; /* Увеличен размер монеты */
+  width: 60px; /* Размер монеты увеличен */
   vertical-align: middle;
   margin-right: 10px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); /* Мягкое белое свечение */
 }
 
 .silver-level {
   display: flex;
+  justify-content: center;
   align-items: center;
   font-size: 18px;
-  margin-right: 20px;
+  margin-top: 10px; /* Silver с кубком под счётчиком */
 }
 
 .silver-icon {
   width: 20px;
-  vertical-align: middle;
   margin-right: 5px;
 }
 
@@ -79,8 +81,8 @@ body, html {
   cursor: pointer;
 }
 
-.plane-icon {
-  width: 100px; /* Размер для icon сверху */
+.central-coin-icon {
+  width: 120px; /* Увеличен размер центральной кнопки */
 }
 
 .energy {
@@ -102,7 +104,7 @@ body, html {
   justify-content: space-between;
   background-color: rgba(51, 51, 51, 0.5); /* Полупрозрачное меню */
   padding: 10px 0;
-  width: 60%; /* Уже нижнее меню */
+  width: 50%; /* Нижнее меню уже */
   border-radius: 20px;
 }
 
