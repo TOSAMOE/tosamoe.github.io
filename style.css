@@ -6,7 +6,7 @@
 
 body, html {
   height: 100%;
-  overflow: hidden; /* Убираем скролл полностью */
+  overflow: hidden; /* Убираем прокрутку страницы */
   font-family: Arial, sans-serif;
 }
 
@@ -25,7 +25,7 @@ body, html {
   height: 8px;
   background: #555;
   border-radius: 10px;
-  margin: 0 auto 10px; /* Центрируем progress bar */
+  margin: 0 auto 10px;
 }
 
 .progress-bar-fill {
@@ -39,13 +39,13 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
+  font-size: 36px; /* Увеличил шрифт для счётчика монет */
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .coin-icon {
-  width: 60px;
+  width: 240px; /* Увеличил Coin в 4 раза */
   vertical-align: middle;
   margin-right: 10px;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); /* Мягкое свечение */
@@ -80,7 +80,7 @@ body, html {
 }
 
 .central-coin-icon {
-  width: 360px; /* Увеличил центральную кнопку в 3 раза */
+  width: 120px; /* Возвращаем plane-icon к прежнему размеру */
   margin-bottom: 10px;
 }
 
@@ -88,6 +88,7 @@ body, html {
   margin-top: 10px;
   font-size: 20px;
   color: #888;
+  margin-bottom: 10px; /* Подвинул энергию выше нижнего меню */
 }
 
 .nav-container {
@@ -148,14 +149,15 @@ body, html {
   }
 
   .central-coin-icon {
-    width: 300px; /* Чуть уменьшил для мобильных экранов */
+    width: 120px; /* Размер центральной кнопки на мобильных экранах */
   }
 
   .coins-display {
-    font-size: 24px;
+    font-size: 36px; /* Увеличил размер шрифта для счётчика монет */
   }
 
   .energy {
     font-size: 18px;
+    margin-bottom: 10px; /* Энергия выше нижнего меню */
   }
 }
