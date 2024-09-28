@@ -11,8 +11,7 @@
     <!-- Top Section for Coins and Silver Level Display -->
     <div class="coins-display">
       <img src="coin-icon.png" alt="Coin" class="coin-icon">
-      <span id="coin-count">15683</span>
-      <span class="silver-level">Silver</span>
+      <span id="coin-count">0</span>
     </div>
 
     <!-- Progress Bar -->
@@ -20,25 +19,30 @@
       <div class="progress-bar-fill"></div>
     </div>
 
+    <!-- Display of Coin Count after Progress Bar -->
+    <p class="coin-count">15683</p>
+
     <!-- Earn Page -->
     <div class="page" id="earn-page">
       <button class="earn-button" onclick="earnCoins()">
         <img src="coin-icon.png" alt="Earn" class="plane-icon">
       </button>
-      <p class="energy">Energy: 3412/4000</p>
+      <p class="energy" id="energy-count">Energy: 4000</p>
     </div>
 
     <!-- Bottom Navigation Menu -->
     <div class="nav-container">
       <div class="nav-menu">
-        <button onclick="switchPage('tasks-page')">
-          <img src="tasks-icon.png" alt="Tasks" class="menu-icon">
-          <p>Tasks</p>
-        </button>
-        <button onclick="switchPage('profile-page')">
-          <img src="profile-icon.png" alt="Profile" class="menu-icon">
-          <p>Profile</p>
-        </button>
+        <div class="task-profile-group">
+          <button onclick="switchPage('tasks-page')">
+            <img src="tasks-icon.png" alt="Tasks" class="menu-icon">
+            <p>Tasks</p>
+          </button>
+          <button onclick="switchPage('profile-page')">
+            <img src="profile-icon.png" alt="Profile" class="menu-icon">
+            <p>Profile</p>
+          </button>
+        </div>
         <button onclick="switchPage('earn-page')" class="active">
           <img src="earn-icon.png" alt="Earn" class="menu-icon">
           <p>Earn</p>
@@ -50,8 +54,27 @@
         <img src="boost-icon.png" alt="Boost" class="boost-icon">
       </button>
     </div>
+
+    <!-- Silver Level with Cup Icon -->
+    <div class="silver-level">
+      <img src="cup-icon.png" alt="Cup" class="silver-icon">
+      <span>Silver</span>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    let energy = 4000;
+
+    function earnCoins() {
+      if (energy > 0) {
+        energy--;
+        document.getElementById('energy-count').innerText = 'Energy: ' + energy;
+      }
+    }
+
+    function switchPage(pageId) {
+      // Implement page switching logic
+    }
+  </script>
 </body>
 </html>
