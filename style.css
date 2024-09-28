@@ -45,7 +45,7 @@ body, html {
 }
 
 .coin-icon {
-  width: 240px;
+  width: 60px;
   vertical-align: middle;
   margin-right: 10px;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); /* Мягкое свечение */
@@ -80,7 +80,7 @@ body, html {
 }
 
 .central-coin-icon {
-  width: 120px; /* Увеличил центральную кнопку в 3 раза */
+  width: 360px; /* Увеличил центральную кнопку в 3 раза */
   margin-bottom: 10px;
 }
 
