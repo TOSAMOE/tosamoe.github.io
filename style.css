@@ -34,33 +34,14 @@ body, html {
 .silver-level {
   font-size: 14px;
   font-weight: normal;
-  display: block;
+  display: inline-block;
   margin-top: 5px;
 }
 
-.page {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.earn-button {
-  background: none;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
-
-.plane-icon {
-  width: 150px;
-}
-
-.energy {
-  margin-top: 10px;
-  font-size: 18px;
-  color: #888;
+.silver-icon {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
 }
 
 .progress-bar {
@@ -79,9 +60,34 @@ body, html {
   border-radius: 10px;
 }
 
-.goal-display {
+.page {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.earn-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.plane-icon {
+  width: 200px; /* Увеличиваем размер кнопки */
+}
+
+.energy {
   margin-top: 10px;
-  font-size: 18px;
+  font-size: 20px;
+  color: #888;
+}
+
+.coin-count {
+  margin-top: 20px;
+  font-size: 24px;
 }
 
 .nav-container {
@@ -120,6 +126,12 @@ body, html {
 
 .nav-menu .active p {
   color: yellow;
+}
+
+.nav-menu .task-profile-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Boost button */
