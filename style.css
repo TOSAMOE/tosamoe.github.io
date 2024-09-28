@@ -13,10 +13,25 @@ body, html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  height: 100vh; /* Высота 100% для фиксированного интерфейса */
   background: linear-gradient(to bottom, black, blue);
   color: white;
   text-align: center;
+}
+
+.progress-bar {
+  width: 80%;
+  height: 8px;
+  background: #555;
+  border-radius: 10px;
+  margin: 0 auto 10px; /* Центрировал progress bar и сделал отступы */
+}
+
+.progress-bar-fill {
+  width: 50%;
+  height: 100%;
+  background: #00f;
+  border-radius: 10px;
 }
 
 .coins-display {
@@ -35,37 +50,17 @@ body, html {
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); /* Мягкое белое свечение */
 }
 
-.plane-icon {
-  width: 40px; /* Самолёт возле счётчика */
-  margin-right: 10px;
-}
-
 .silver-level {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  margin-top: 10px; /* Silver и кубок по центру под счётчиком */
+  margin-top: 10px;
 }
 
 .silver-icon {
   width: 20px;
   margin-right: 5px;
-}
-
-.progress-bar {
-  width: 80%;
-  height: 8px;
-  background: #555;
-  border-radius: 10px;
-  margin: 10px auto 10px; /* Переместил Progress Bar ниже */
-}
-
-.progress-bar-fill {
-  width: 50%;
-  height: 100%;
-  background: #00f;
-  border-radius: 10px;
 }
 
 .page {
@@ -74,7 +69,6 @@ body, html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px; /* Добавил padding, чтобы кнопка не была слишком низко */
 }
 
 .earn-button {
@@ -85,7 +79,8 @@ body, html {
 }
 
 .central-coin-icon {
-  width: 120px; /* Увеличенный размер центральной кнопки */
+  width: 120px; /* Центральная кнопка увеличена */
+  margin-bottom: 10px;
 }
 
 .energy {
@@ -99,7 +94,6 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 0;
 }
 
 .nav-menu {
@@ -107,7 +101,7 @@ body, html {
   justify-content: space-between;
   background-color: rgba(51, 51, 51, 0.5); /* Полупрозрачное меню */
   padding: 10px 0;
-  width: 80%; /* Уменьшил ширину нижнего меню */
+  width: 80%;
   border-radius: 20px;
 }
 
@@ -145,22 +139,22 @@ body, html {
 @media (max-width: 600px) {
   /* Адаптация для мобильных устройств */
   .progress-bar {
-    margin: 10px auto; /* Сдвинул Progress Bar ниже для мобильных */
+    margin: 10px auto;
   }
 
   .nav-menu {
-    width: 90%; /* Сделал нижнее меню уже на мобильных */
+    width: 90%;
   }
 
   .central-coin-icon {
-    width: 100px; /* Немного уменьшил центральную кнопку на мобильных */
+    width: 100px;
   }
 
   .coins-display {
-    font-size: 24px; /* Размер счётчика на мобильных */
+    font-size: 24px;
   }
 
   .energy {
-    font-size: 18px; /* Размер счётчика энергии на мобильных */
+    font-size: 18px;
   }
 }
