@@ -159,3 +159,14 @@ body, html {
     font-size: 18px;
   }
 }
+
+/* Стили для всех кнопок */
+button {
+  user-select: none; /* Отключает возможность выделять текст */
+  outline: none; /* Убирает фокусную рамку при клике */
+  -webkit-tap-highlight-color: transparent; /* Убирает "подсветку" при нажатии на мобильных устройствах */
+  -webkit-user-select: none; /* Отключает выделение текста в WebKit */
+  -moz-user-select: none; /* Отключает выделение текста в Firefox */
+  -ms-user-select: none; /* Отключает выделение текста в IE */
+  cursor: pointer; /* Меняет указатель на руку */
+}
