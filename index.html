@@ -8,16 +8,15 @@
 </head>
 <body>
   <div class="container">
-    <!-- Coins Section with Plane Icon -->
-    <div class="coins-display">
-      <img src="plane-icon.png" alt="Plane" class="plane-icon"> <!-- Самолёт около счётчика -->
-      <img src="coin-icon.png" alt="Coin" class="coin-icon">
-      <span id="coin-count">0</span>
-    </div>
-
     <!-- Progress Bar -->
     <div class="progress-bar">
       <div class="progress-bar-fill" id="progress-bar-fill"></div>
+    </div>
+
+    <!-- Coins Section -->
+    <div class="coins-display">
+      <img src="coin-icon.png" alt="Coin" class="coin-icon">
+      <span id="coin-count">0</span>
     </div>
 
     <!-- Silver Level под счётчиком -->
@@ -29,9 +28,9 @@
     <!-- Earn Page -->
     <div class="page" id="earn-page">
       <button class="earn-button" onclick="earnCoins()">
-        <img src="coin-icon.png" alt="Earn" class="central-coin-icon"> <!-- Центральная кнопка монеты -->
+        <img src="coin-icon.png" alt="Earn" class="central-coin-icon">
       </button>
-      <p class="energy" id="energy-count">4000</p> <!-- Только числовой счётчик -->
+      <p class="energy" id="energy-count">4000</p>
     </div>
 
     <!-- Bottom Navigation Menu -->
@@ -51,7 +50,7 @@
         </button>
       </div>
 
-      <!-- Boost Button (top-right corner) -->
+      <!-- Boost Button -->
       <button class="boost-button">
         <img src="boost-icon.png" alt="Boost" class="boost-icon">
       </button>
@@ -72,7 +71,7 @@
     }
 
     function switchPage(pageId) {
-      // Implement page switching logic
+      // Реализовать логику переключения страниц
     }
   </script>
 </body>
