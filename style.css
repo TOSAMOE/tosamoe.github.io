@@ -6,6 +6,7 @@
 
 body, html {
   height: 100%;
+  overflow: hidden; /* Убираем скролл полностью */
   font-family: Arial, sans-serif;
 }
 
@@ -13,7 +14,7 @@ body, html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh; /* Высота 100% для фиксированного интерфейса */
+  height: 100vh; /* Фиксированная высота для мобильных экранов */
   background: linear-gradient(to bottom, black, blue);
   color: white;
   text-align: center;
@@ -24,11 +25,11 @@ body, html {
   height: 8px;
   background: #555;
   border-radius: 10px;
-  margin: 0 auto 10px; /* Центрировал progress bar и сделал отступы */
+  margin: 0 auto 10px; /* Центрируем progress bar */
 }
 
 .progress-bar-fill {
-  width: 50%;
+  width: 50%; /* Пример заполнения */
   height: 100%;
   background: #00f;
   border-radius: 10px;
@@ -44,10 +45,10 @@ body, html {
 }
 
 .coin-icon {
-  width: 60px; /* Увеличенный размер монеты */
+  width: 60px;
   vertical-align: middle;
   margin-right: 10px;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); /* Мягкое белое свечение */
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); /* Мягкое свечение */
 }
 
 .silver-level {
@@ -79,7 +80,7 @@ body, html {
 }
 
 .central-coin-icon {
-  width: 120px; /* Центральная кнопка увеличена */
+  width: 360px; /* Увеличил центральную кнопку в 3 раза */
   margin-bottom: 10px;
 }
 
@@ -101,7 +102,7 @@ body, html {
   justify-content: space-between;
   background-color: rgba(51, 51, 51, 0.5); /* Полупрозрачное меню */
   padding: 10px 0;
-  width: 80%;
+  width: 70%; /* Сужаем нижнее меню */
   border-radius: 20px;
 }
 
@@ -147,7 +148,7 @@ body, html {
   }
 
   .central-coin-icon {
-    width: 100px;
+    width: 300px; /* Чуть уменьшил для мобильных экранов */
   }
 
   .coins-display {
