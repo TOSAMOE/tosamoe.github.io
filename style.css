@@ -26,10 +26,11 @@ body, html {
   font-size: 30px;
   font-weight: bold;
   position: relative;
+  margin-bottom: 10px;
 }
 
 .coin-icon {
-  width: 35px;
+  width: 50px; /* Увеличен размер монеты */
   vertical-align: middle;
   margin-right: 10px;
 }
@@ -79,7 +80,7 @@ body, html {
 }
 
 .plane-icon {
-  width: 200px; /* Размер кнопки "Earn" */
+  width: 100px; /* Размер для icon сверху */
 }
 
 .energy {
@@ -98,10 +99,10 @@ body, html {
 
 .nav-menu {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   background-color: rgba(51, 51, 51, 0.5); /* Полупрозрачное меню */
-  padding: 15px 0;
-  width: 80%;
+  padding: 10px 0;
+  width: 60%; /* Уже нижнее меню */
   border-radius: 20px;
 }
 
