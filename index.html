@@ -1,40 +1,61 @@
+𝐡𝐭𝐦𝐥:
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AirCoin Game</title>
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
+  <title>AirCoin</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <!-- Прогресс бар -->
+    <!-- Progress Bar -->
     <div class="progress-bar">
       <div class="progress-bar-fill" id="progress-bar-fill"></div>
     </div>
 
-    <!-- Счётчик монет и уровни -->
+    <!-- Coins Section -->
     <div class="coins-display">
       <img src="plane-icon.png" alt="Plane" class="coin-icon">
       <span id="coin-count">0</span>
     </div>
 
-    <!-- Уровень -->
-    <div class="level-display">
-      <img id="level-icon" src="bronze-icon.png" alt="Level" class="level-icon">
-      <span id="level-name">Bronze</span>
+    <!-- Silver Level -->
+    <div class="silver-level">
+      <img src="cup-icon.png" alt="Cup" class="silver-icon">
+      <span>Silver</span>
     </div>
 
-    <!-- Монетка -->
-    <div class="coin-container">
-      <img id="coin" src="coin-icon.png" alt="Coin" class="central-coin-icon">
+    <!-- Earn Page -->
+    <div class="page" id="earn-page">
+      <button class="earn-button" id="earn-button">
+        <img src="coin-icon.png" alt="Earn" class="central-coin-icon" id="coin-icon">
+      </button>
+      <p class="energy" id="energy-count">4000/4000</p>
     </div>
 
-    <!-- Энергия -->
-    <p class="energy" id="energy-count">4000/4000</p>
+    <!-- Bottom Navigation Menu -->
+    <div class="nav-container">
+      <div class="nav-menu task-profile-group">
+        <button onclick="switchPage('tasks-page')" class="nav-item">
+          <img src="tasks-icon.png" alt="Tasks" class="menu-icon">
+          <p>Tasks</p>
+        </button>
+        <button onclick="switchPage('profile-page')" class="nav-item">
+          <img src="profile-icon.png" alt="Profile" class="menu-icon">
+          <p>Profile</p>
+        </button>
+        <button onclick="switchPage('earn-page')" class="nav-item active">
+          <img src="earn-icon.png" alt="Earn" class="menu-icon">
+          <p>Earn</p>
+        </button>
+      </div>
 
-    <!-- Канвас для самолётиков и хитбоксов -->
-    <canvas id="hitbox-canvas"></canvas>
+      <!-- Boost Button -->
+      <button class="boost-button">
+        <img src="boost-icon.png" alt="Boost" class="boost-icon">
+      </button>
+    </div>
   </div>
 
   <script src="script.js"></script>
