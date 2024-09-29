@@ -157,20 +157,16 @@ body, html {
     width: 90%;
   }
 
-  .central-coin-icon {
+ .central-coin-icon {
   width: 360px;
   margin-bottom: 10px;
-  transition: transform 0.2s ease-in-out; /* Добавляем плавную анимацию */
+  transition: transform 0.2s ease; /* Плавная анимация */
 }
 
-/* Анимация наклона */
-.coin-tilt-left {
-  transform: rotate(-10deg); /* Наклон влево */
+.central-coin-icon:active {
+  transform: scale(0.9); /* Уменьшаем монетку при нажатии */
 }
 
-.coin-tilt-right {
-  transform: rotate(10deg); /* Наклон вправо */
-}
 
   .coins-display {
     font-size: 24px;
