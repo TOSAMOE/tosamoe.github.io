@@ -1,7 +1,7 @@
 let coins = 0;
 let energy = 4000;
 const maxEnergy = 4000;
-const restoreRate = 0.2; // Восстанавливать энергию каждые 0.2 секунды (1 единица)
+const restoreRate = 0.5; // Восстанавливать энергию каждые 0.2 секунды (1 единица)
 let lastUpdateTime = Date.now();
 
 const levels = [
