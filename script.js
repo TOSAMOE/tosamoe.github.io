@@ -23,24 +23,40 @@ function loadState() {
   document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
 }
 
-function earnCoins() {
+// Анимация для самолётиков
+function animateAirplane(x, y) {
+  const airplane = document.createElement('img');
+  airplane.src = 'plane-icon.png'; // Иконка самолёта
+  airplane.classList.add('airplane');
+  airplane.style.left = `${x}px`;
+  airplane.style.top = `${y}px`;
+
+  document.body.appendChild(airplane);
+
+  // Случайное направление полёта
+  const randomX = Math.random() * window.innerWidth;
+  const randomY = Math.random() * window.innerHeight;
+
+  airplane.style.transform = `translate(${randomX - x}px, ${randomY - y}px)`;
+
+  // Удаление самолёта через 2 секунды
+  setTimeout(() => {
+    airplane.remove();
+  }, 2000);
+}
+
+function earnCoins(event) {
   if (energy > 0) {
     coins++;
     energy--;
     document.getElementById('coin-count').innerText = coins;
     document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
     saveState();
-    
-    // Проверим, срабатывает ли это место
-    console.log("Монетка нажата!");
 
-    // Вибрация на мобильных устройствах
-    if (navigator.vibrate) {
-      console.log("Вибрация вызвана");
-      navigator.vibrate(100); // Вибрация на 100 миллисекунд
-    } else {
-      console.log("Вибрация не поддерживается на этом устройстве");
-    }
+    const x = event.clientX;
+    const y = event.clientY;
+
+    animateAirplane(x, y); // Запускаем анимацию самолётика
   }
 }
 
