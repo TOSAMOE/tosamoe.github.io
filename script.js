@@ -2,7 +2,11 @@ let coins = 0;
 let energy = 4000;
 const maxEnergy = 4000;
 
-// Функция для загрузки данных из LocalStorage
+function saveState() {
+  localStorage.setItem('coins', coins);
+  localStorage.setItem('energy', energy);
+}
+
 function loadState() {
   const savedCoins = localStorage.getItem('coins');
   const savedEnergy = localStorage.getItem('energy');
@@ -19,23 +23,6 @@ function loadState() {
   document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
 }
 
-// Функция для сохранения данных в LocalStorage
-function saveState() {
-  localStorage.setItem('coins', coins);
-  localStorage.setItem('energy', energy);
-}
-
-// Анимация для монетки
-function animateCoin() {
-  const coinIcon = document.getElementById('coin-icon');
-  coinIcon.style.transform = 'scale(0.9)'; // Уменьшаем на 10%
-  
-  setTimeout(() => {
-    coinIcon.style.transform = 'scale(1)'; // Возвращаем к исходному размеру
-  }, 100); // Время для возврата к исходному размеру
-}
-
-// Функция для заработка монет
 function earnCoins() {
   if (energy > 0) {
     coins++;
@@ -43,11 +30,9 @@ function earnCoins() {
     document.getElementById('coin-count').innerText = coins;
     document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
     saveState();
-    animateCoin(); // Запускаем анимацию при клике
   }
 }
 
-// Инициализация страницы
 window.onload = function() {
   loadState();
 };
