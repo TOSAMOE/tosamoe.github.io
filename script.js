@@ -1,17 +1,21 @@
 let coins = 0;
 let energy = 4000;
 const maxEnergy = 4000;
+const restoreRate = 0.2; // Восстанавливать энергию каждые 0.2 секунды (1 единица)
+let lastUpdateTime = Date.now();
 
-// Функция для сохранения состояния
+// Сохранение данных
 function saveState() {
   localStorage.setItem('coins', coins);
   localStorage.setItem('energy', energy);
+  localStorage.setItem('lastUpdateTime', Date.now()); // Сохраняем время последнего обновления энергии
 }
 
-// Функция для загрузки состояния
+// Загрузка данных
 function loadState() {
   const savedCoins = localStorage.getItem('coins');
   const savedEnergy = localStorage.getItem('energy');
+  const savedLastUpdateTime = localStorage.getItem('lastUpdateTime');
 
   if (savedCoins !== null) {
     coins = parseInt(savedCoins, 10);
@@ -21,80 +25,55 @@ function loadState() {
     energy = parseInt(savedEnergy, 10);
   }
 
+  if (savedLastUpdateTime !== null) {
+    lastUpdateTime = parseInt(savedLastUpdateTime, 10);
+  }
+
+  // Рассчитаем, сколько времени прошло с момента последнего обновления энергии
+  const timeElapsed = (Date.now() - lastUpdateTime) / 1000; // В секундах
+  const energyToRestore = Math.floor(timeElapsed * 5); // Количество единиц энергии для восстановления (5 единиц в секунду)
+
+  // Восстанавливаем энергию с учётом максимального значения
+  energy = Math.min(maxEnergy, energy + energyToRestore);
+
   document.getElementById('coin-count').innerText = coins;
   document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
 }
 
-// Функция для анимации самолётика
-function animateAirplane(x, y) {
-  const airplane = document.createElement('img');
-  airplane.src = 'plane-icon.png'; // Иконка самолёта
-  airplane.classList.add('airplane');
-  airplane.style.position = 'absolute';
-  airplane.style.left = `${x}px`;
-  airplane.style.top = `${y}px`;
-
-  // Отключаем клики по самолёту
-  airplane.style.pointerEvents = 'none';
-
-  document.body.appendChild(airplane);
-
-  // Случайное направление движения самолёта
-  const angleRad = Math.random() * 2 * Math.PI; // Случайный угол в радианах
-  const speed = 300 + Math.random() * 200; // Скорость движения самолёта
-  const directionX = Math.cos(angleRad); // Направление по оси X
-  const directionY = Math.sin(angleRad); // Направление по оси Y
-
-  // Устанавливаем поворот самолёта по направлению его движения
-  const angleDeg = angleRad * (180 / Math.PI); // Угол в градусах
-  airplane.style.transform = `rotate(${angleDeg + 90}deg)`; // Поворот самолёта
-
-  // Запускаем анимацию самолёта
-  let posX = x;
-  let posY = y;
-
-  function moveAirplane() {
-    posX += directionX * 5; // Увеличиваем позицию X на основе направления
-    posY += directionY * 5; // Увеличиваем позицию Y на основе направления
-    airplane.style.left = `${posX}px`;
-    airplane.style.top = `${posY}px`;
-
-    // Проверяем выход за экран
-    if (posX < -50 || posX > window.innerWidth + 50 || posY < -50 || posY > window.innerHeight + 50) {
-      airplane.remove(); // Удаляем самолётик, если он вылетел за экран
-    } else {
-      requestAnimationFrame(moveAirplane); // Продолжаем движение
-    }
+// Функция восстановления энергии
+function restoreEnergy() {
+  if (energy < maxEnergy) {
+    energy = Math.min(maxEnergy, energy + 1); // Восстанавливаем 1 единицу энергии
+    document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
+    saveState(); // Сохраняем обновленное значение энергии
   }
-
-  moveAirplane();
 }
 
+// Запускаем восстановление энергии каждые 0.2 секунды
+setInterval(restoreEnergy, 200);
 
-// Функция для заработка монет и запуска самолётика
-function earnCoins(event) {
+// Функция заработка монет
+function earnCoins() {
   if (energy > 0) {
     coins++;
     energy--;
     document.getElementById('coin-count').innerText = coins;
     document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
     saveState();
-
-    // Получаем координаты клика
-    const x = event.clientX;
-    const y = event.clientY;
-
-    // Запускаем анимацию самолётика в точке клика
-    animateAirplane(x, y);
+    
+    // Вибрация на мобильных устройствах
+    if (navigator.vibrate) {
+      navigator.vibrate(100); // Вибрация на 100 миллисекунд
+    }
   }
 }
 
-// Загрузка состояния при загрузке страницы
+// Загружаем состояние при загрузке страницы
 window.onload = function() {
   loadState();
 };
 
-// Функция для переключения страниц
+// Переключение страниц
 function switchPage(pageId) {
   document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
