@@ -28,29 +28,22 @@ function animateAirplane(x, y) {
   const airplane = document.createElement('img');
   airplane.src = 'plane-icon.png'; // Иконка самолёта
   airplane.classList.add('airplane');
-  
+  airplane.style.left = `${x}px`;
+  airplane.style.top = `${y}px`;
+
   document.body.appendChild(airplane);
 
   // Случайное направление полёта
   const randomX = (Math.random() - 0.5) * window.innerWidth * 2; // Увеличенные значения для выхода за экран
   const randomY = (Math.random() - 0.5) * window.innerHeight * 2;
 
-  // Вычисляем разницу по координатам для определения угла
-  const deltaX = randomX - x;
-  const deltaY = randomY - y;
+  // Вычисляем угол между точкой клика и направлением полёта
+  const deltaX = randomX;
+  const deltaY = randomY;
+  const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Преобразуем радианы в градусы
 
-  // Вычисляем угол направления полета с помощью Math.atan2
-  const angle = Math.atan2(deltaY, deltaX); // Угол в радианах
-
-  // Если исходное изображение самолета направлено носом вверх, нужно скорректировать на 90 градусов
-  const adjustedAngle = angle - Math.PI / 2; // Коррекция на 90 градусов (вычитаем 90 градусов)
-
-  // Устанавливаем начальное положение и поворот в одном действии
-  airplane.style.left = `${x}px`;
-  airplane.style.top = `${y}px`;
-
-  // Применяем поворот самолёта с коррекцией и его перемещение
-  airplane.style.transform = `rotate(${adjustedAngle}rad) translate(${randomX - x}px, ${randomY - y}px)`;
+  // Поворачиваем самолёт в направлении полёта (угол поворота -90, чтобы компенсировать ориентацию вверх)
+  airplane.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${angle - 90}deg)`;
 
   // Плавное исчезновение после выхода за экран
   setTimeout(() => {
