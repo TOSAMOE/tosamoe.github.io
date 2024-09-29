@@ -81,7 +81,11 @@ body, html {
 .central-coin-icon {
   width: 360px;
   margin-bottom: 10px;
-  transition: transform 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out; /* Плавное увеличение */
+}
+
+.central-coin-icon:active {
+  transform: scale(0.9); /* При нажатии монетка уменьшится */
 }
 
 .energy {
@@ -160,8 +164,8 @@ body, html {
 }
 
 button {
-  user-select: none; /* Убираем возможность выделения текста */
+  user-select: none;
   outline: none;
-  -webkit-tap-highlight-color: transparent; /* Отключаем подсветку на мобильных устройствах */
+  -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 }
