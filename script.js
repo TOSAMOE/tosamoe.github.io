@@ -36,6 +36,28 @@ function earnCoins() {
   }
 }
 
+// Анимация монетки при клике
+const coinIcon = document.querySelector('.central-coin-icon');
+
+coinIcon.addEventListener('mousedown', (e) => {
+  const rect = coinIcon.getBoundingClientRect();
+  const x = e.clientX - rect.left; // Получаем координаты клика относительно монетки
+  const midpoint = rect.width / 2;
+
+  if (x < midpoint) {
+    // Наклон влево
+    coinIcon.classList.add('coin-tilt-left');
+  } else {
+    // Наклон вправо
+    coinIcon.classList.add('coin-tilt-right');
+  }
+});
+
+coinIcon.addEventListener('mouseup', () => {
+  // Убираем наклон при отпускании кнопки
+  coinIcon.classList.remove('coin-tilt-left', 'coin-tilt-right');
+});
+
 // Функция для переключения страниц
 function switchPage(pageId) {
   document.querySelectorAll('.page').forEach(page => {
