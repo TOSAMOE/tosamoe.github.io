@@ -34,15 +34,20 @@ function animateAirplane(x, y) {
   document.body.appendChild(airplane);
 
   // Случайное направление полёта
-  const randomX = Math.random() * window.innerWidth;
-  const randomY = Math.random() * window.innerHeight;
+  const randomX = (Math.random() - 0.5) * window.innerWidth * 2; // Увеличенные значения для выхода за экран
+  const randomY = (Math.random() - 0.5) * window.innerHeight * 2;
 
-  airplane.style.transform = `translate(${randomX - x}px, ${randomY - y}px)`;
+  airplane.style.transform = `translate(${randomX}px, ${randomY}px)`;
 
-  // Удаление самолёта через 2 секунды
+  // Плавное исчезновение после выхода за экран
+  setTimeout(() => {
+    airplane.style.opacity = 0;
+  }, 2500); // Самолётик будет плавать около 2.5 сек
+
+  // Удаление самолётика после 3 секунд
   setTimeout(() => {
     airplane.remove();
-  }, 2000);
+  }, 3000);
 }
 
 function earnCoins(event) {
@@ -71,8 +76,4 @@ function switchPage(pageId) {
   document.getElementById(pageId).style.display = 'flex';
 
   document.querySelectorAll('.nav-menu button').forEach(button => {
-    button.classList.remove('active');
-  });
-
-  document.querySelector(`[onclick="switchPage('${pageId}')"]`).classList.add('active');
-}
+    button.classList
