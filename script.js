@@ -30,6 +30,11 @@ function earnCoins() {
     document.getElementById('coin-count').innerText = coins;
     document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
     saveState();
+
+    // Вибрация на мобильных устройствах
+    if (navigator.vibrate) {
+      navigator.vibrate(100); // Вибрация на 100 миллисекунд
+    }
   }
 }
 
