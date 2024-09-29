@@ -44,8 +44,8 @@ function animateAirplane(x, y) {
   // Вычисляем угол поворота самолёта с помощью Math.atan2
   const angle = Math.atan2(deltaY, deltaX); // Угол в радианах
 
-  // Применяем поворот самолёта
-  airplane.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${angle}rad)`;
+  // Применяем поворот самолёта (добавляем 90 градусов для корректировки направления носа)
+  airplane.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${angle + Math.PI / 2}rad)`;
 
   // Плавное исчезновение после выхода за экран
   setTimeout(() => {
