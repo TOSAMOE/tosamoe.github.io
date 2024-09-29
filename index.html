@@ -27,7 +27,7 @@
 
     <!-- Earn Page -->
     <div class="page" id="earn-page">
-      <button class="earn-button" onclick="earnCoins()">
+      <button class="earn-button" onclick="earnCoins(event)">
         <img src="coin-icon.png" alt="Earn" class="central-coin-icon"> <!-- Центральная кнопка -->
       </button>
       <p class="energy" id="energy-count">4000/4000</p> <!-- Отображаем и текущую и максимальную энергию -->
@@ -57,54 +57,6 @@
     </div>
   </div>
 
-  <script>
-    let coins = 0;
-    let energy = 4000;
-    const maxEnergy = 4000;
-
-    // Функция для сохранения состояния в LocalStorage
-    function saveState() {
-      localStorage.setItem('coins', coins);
-      localStorage.setItem('energy', energy);
-    }
-
-    // Функция для загрузки состояния из LocalStorage
-    function loadState() {
-      const savedCoins = localStorage.getItem('coins');
-      const savedEnergy = localStorage.getItem('energy');
-
-      if (savedCoins !== null) {
-        coins = parseInt(savedCoins, 10); // Преобразуем в число
-      }
-
-      if (savedEnergy !== null) {
-        energy = parseInt(savedEnergy, 10); // Преобразуем в число
-      }
-
-      // Обновление отображаемых значений
-      document.getElementById('coin-count').innerText = coins;
-      document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
-    }
-
-    // Функция для заработка монет
-    function earnCoins() {
-      if (energy > 0) {
-        energy--;
-        coins++;
-        document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`; // Обновление счётчика энергии
-        document.getElementById('coin-count').innerText = coins; // Обновление счётчика монет
-        saveState(); // Сохранение данных после изменения
-      }
-    }
-
-    // Загрузка состояния при загрузке страницы
-    window.onload = function() {
-      loadState();
-    };
-
-    function switchPage(pageId) {
-      // Реализовать логику переключения страниц
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
