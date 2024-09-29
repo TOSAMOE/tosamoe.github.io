@@ -2,13 +2,13 @@ let coins = 0;
 let energy = 4000;
 const maxEnergy = 4000;
 
-// Сохранение состояния
+// Функция для сохранения состояния
 function saveState() {
   localStorage.setItem('coins', coins);
   localStorage.setItem('energy', energy);
 }
 
-// Загрузка состояния
+// Функция для загрузки состояния
 function loadState() {
   const savedCoins = localStorage.getItem('coins');
   const savedEnergy = localStorage.getItem('energy');
@@ -25,7 +25,7 @@ function loadState() {
   document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
 }
 
-// Анимация для самолётиков
+// Функция для анимации самолётика
 function animateAirplane(x, y) {
   const airplane = document.createElement('img');
   airplane.src = 'plane-icon.png'; // Иконка самолёта
@@ -36,34 +36,38 @@ function animateAirplane(x, y) {
 
   document.body.appendChild(airplane);
 
-  // Случайное направление полёта (векторы смещения)
-  const randomX = (Math.random() - 0.5) * window.innerWidth * 2; // Увеличенные значения для выхода за экран
-  const randomY = (Math.random() - 0.5) * window.innerHeight * 2;
+  // Случайное направление движения самолёта
+  const angleRad = Math.random() * 2 * Math.PI; // Случайный угол в радианах
+  const speed = 300 + Math.random() * 200; // Скорость движения самолёта
+  const directionX = Math.cos(angleRad); // Направление по оси X
+  const directionY = Math.sin(angleRad); // Направление по оси Y
 
-  // Вычисляем угол полёта самолёта
-  const deltaX = randomX;
-  const deltaY = randomY;
-  const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Угол в градусах
+  // Устанавливаем поворот самолёта по направлению его движения
+  const angleDeg = angleRad * (180 / Math.PI); // Угол в градусах
+  airplane.style.transform = `rotate(${angleDeg + 90}deg)`; // Поворот самолёта (плюс 90 для учёта ориентации иконки)
 
-  // Поворачиваем самолёт в направлении полёта (учитываем изначальное направление вверх)
-  airplane.style.transform = `rotate(${angle - 90}deg)`;
+  // Запускаем анимацию самолёта
+  let posX = x;
+  let posY = y;
 
-  // Анимация полёта самолёта (выполнение трансформации полёта)
-  airplane.style.transition = 'transform 3s linear, opacity 0.5s ease-out';
-  airplane.style.transform += ` translate(${randomX}px, ${randomY}px)`;
+  function moveAirplane() {
+    posX += directionX * 5; // Увеличиваем позицию X на основе направления
+    posY += directionY * 5; // Увеличиваем позицию Y на основе направления
+    airplane.style.left = `${posX}px`;
+    airplane.style.top = `${posY}px`;
 
-  // Плавное исчезновение после выхода за экран
-  setTimeout(() => {
-    airplane.style.opacity = 0;
-  }, 2500); // Самолётик исчезает через 2.5 секунды
+    // Проверяем выход за экран
+    if (posX < -50 || posX > window.innerWidth + 50 || posY < -50 || posY > window.innerHeight + 50) {
+      airplane.remove(); // Удаляем самолётик, если он вылетел за экран
+    } else {
+      requestAnimationFrame(moveAirplane); // Продолжаем движение
+    }
+  }
 
-  // Удаление самолётика после 3 секунд
-  setTimeout(() => {
-    airplane.remove();
-  }, 3000);
+  moveAirplane();
 }
 
-// Функция для клика и заработка монет
+// Функция для заработка монет и запуска самолётика
 function earnCoins(event) {
   if (energy > 0) {
     coins++;
@@ -72,18 +76,21 @@ function earnCoins(event) {
     document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
     saveState();
 
-    // Запуск анимации самолётика
+    // Получаем координаты клика
     const x = event.clientX;
     const y = event.clientY;
+
+    // Запускаем анимацию самолётика в точке клика
     animateAirplane(x, y);
   }
 }
 
+// Загрузка состояния при загрузке страницы
 window.onload = function() {
   loadState();
 };
 
-// Переключение страниц
+// Функция для переключения страниц
 function switchPage(pageId) {
   document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
