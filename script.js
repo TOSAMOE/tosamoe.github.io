@@ -30,10 +30,16 @@ function earnCoins() {
     document.getElementById('coin-count').innerText = coins;
     document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
     saveState();
+    
+    // Проверим, срабатывает ли это место
+    console.log("Монетка нажата!");
 
     // Вибрация на мобильных устройствах
     if (navigator.vibrate) {
+      console.log("Вибрация вызвана");
       navigator.vibrate(100); // Вибрация на 100 миллисекунд
+    } else {
+      console.log("Вибрация не поддерживается на этом устройстве");
     }
   }
 }
