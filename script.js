@@ -1,118 +1,138 @@
+// Основные переменные
 let coins = 0;
 let energy = 4000;
 const maxEnergy = 4000;
-const restoreRate = 0.5; // Восстанавливать энергию каждые 0.2 секунды (1 единица)
-let lastUpdateTime = Date.now();
+const progressBarFill = document.getElementById('progress-bar-fill');
+const coinCountElement = document.getElementById('coin-count');
+const energyCountElement = document.getElementById('energy-count');
+const levelNameElement = document.getElementById('level-name');
+const levelIconElement = document.getElementById('level-icon');
 
 const levels = [
-  { name: "Bronze", minClicks: 0, maxClicks: 1000 },
-  { name: "Silver", minClicks: 1000, maxClicks: 2000 },
-  { name: "Gold", minClicks: 2000, maxClicks: 3000 },
-  { name: "Platinum", minClicks: 3000, maxClicks: 4000 },
-  { name: "Emerald", minClicks: 4000, maxClicks: 5000 },
-  { name: "Diamond", minClicks: 5000, maxClicks: Infinity },
+  { name: 'Bronze', icon: 'bronze-icon.png', max: 1000 },
+  { name: 'Silver', icon: 'silver-icon.png', max: 2000 },
+  { name: 'Gold', icon: 'gold-icon.png', max: 3000 },
+  { name: 'Platinum', icon: 'platinum-icon.png', max: 4000 },
+  { name: 'Emerald', icon: 'emerald-icon.png', max: 5000 },
+  { name: 'Diamond', icon: 'diamond-icon.png', max: Infinity }
 ];
 
-// Сохранение данных
-function saveState() {
-  localStorage.setItem('coins', coins);
-  localStorage.setItem('energy', energy);
-  localStorage.setItem('lastUpdateTime', Date.now()); // Сохраняем время последнего обновления энергии
-}
+// Получаем элементы монеты и канваса
+const coin = document.getElementById('coin');
+const canvas = document.getElementById('hitbox-canvas');
+const ctx = canvas.getContext('2d');
 
-// Загрузка данных
-function loadState() {
-  const savedCoins = localStorage.getItem('coins');
-  const savedEnergy = localStorage.getItem('energy');
-  const savedLastUpdateTime = localStorage.getItem('lastUpdateTime');
+// Настраиваем размеры канваса
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-  if (savedCoins !== null) {
-    coins = parseInt(savedCoins, 10);
-  }
+const coinRadius = coin.offsetWidth / 2;
+let coinX = canvas.width / 2;
+let coinY = canvas.height / 2;
 
-  if (savedEnergy !== null) {
-    energy = parseInt(savedEnergy, 10);
-  }
+let planes = [];
 
-  if (savedLastUpdateTime !== null) {
-    lastUpdateTime = parseInt(savedLastUpdateTime, 10);
-  }
-
-  // Рассчитаем, сколько времени прошло с момента последнего обновления энергии
-  const timeElapsed = (Date.now() - lastUpdateTime) / 1000; // В секундах
-  const energyToRestore = Math.floor(timeElapsed * 2); // Количество единиц энергии для восстановления (5 единиц в секунду)
-
-  // Восстанавливаем энергию с учётом максимального значения
-  energy = Math.min(maxEnergy, energy + energyToRestore);
-
-  updateDisplay();
-}
-
-// Функция восстановления энергии
-function restoreEnergy() {
-  if (energy < maxEnergy) {
-    energy = Math.min(maxEnergy, energy + 1); // Восстанавливаем 1 единицу энергии
-    updateDisplay();
-    saveState(); // Сохраняем обновленное значение энергии
-  }
-}
-
-// Запускаем восстановление энергии каждые 0.2 секунды
-setInterval(restoreEnergy, 500);
-
-// Функция заработка монет
-function earnCoins() {
-  if (energy > 0) {
-    coins++;
-    energy--;
-    updateProgressBar();
-    updateDisplay();
-    saveState();
-    
-    // Вибрация на мобильных устройствах
-    if (navigator.vibrate) {
-      navigator.vibrate(100); // Вибрация на 100 миллисекунд
+// Функция для обновления уровня
+function updateLevel() {
+  for (let level of levels) {
+    if (coins < level.max) {
+      levelNameElement.textContent = level.name;
+      levelIconElement.src = level.icon;
+      break;
     }
   }
 }
 
-// Обновление прогресс-бара и уровня
-function updateProgressBar() {
-  const currentLevel = Math.floor(coins / 1000); // Каждый уровень состоит из 1000 кликов
-  const clicksInCurrentLevel = coins % 1000; // Остаток кликов в текущем уровне
-  const progress = (clicksInCurrentLevel / 1000) * 100; // Процент заполнения
+// Функция для создания самолётика
+function createPlane(clickX, clickY) {
+  const plane = {
+    x: clickX,
+    y: clickY,
+    speedX: Math.random() * 4 - 2,
+    speedY: Math.random() * 4 - 2,
+    rotation: Math.atan2(Math.random() * 2 - 1, Math.random() * 2 - 1),
+    img: new Image()
+  };
+  plane.img.src = 'plane-icon.png';
+  plane.rotation = Math.atan2(plane.speedY, plane.speedX);
+  planes.push(plane);
+}
 
-  document.getElementById('progress-bar-fill').style.width = `${progress}%`;
+// Обработчик клика по монете
+coin.addEventListener('click', (event) => {
+  const rect = coin.getBoundingClientRect();
+  const clickX = event.clientX;
+  const clickY = event.clientY;
 
-  // Обновляем уровень
-  const currentRank = levels.find(level => coins >= level.minClicks && coins < level.maxClicks);
-  if (currentRank) {
-    document.querySelector('.silver-level span').innerText = currentRank.name;
+  const centerX = rect.left + coinRadius;
+  const centerY = rect.top + coinRadius;
+
+  const distance = Math.sqrt((clickX - centerX) ** 2 + (clickY - centerY) ** 2);
+  if (distance <= coinRadius) {
+    coins++;
+    energy--;
+    coinCountElement.textContent = coins;
+    energyCountElement.textContent = `${energy}/${maxEnergy}`;
+    updateLevel();
+    updateProgressBar();
+    createPlane(clickX, clickY);
   }
+});
+
+// Обновление прогресс-бара
+function updateProgressBar() {
+  const progress = (coins % 1000) / 1000 * 100;
+  progressBarFill.style.width = `${progress}%`;
 }
 
-// Функция обновления отображаемых данных
-function updateDisplay() {
-  document.getElementById('coin-count').innerText = coins;
-  document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
+// Функция для отрисовки хитбокса монеты
+function drawHitbox() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.beginPath();
+  ctx.arc(coinX, coinY, coinRadius, 0, Math.PI * 2);
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 2;
+  ctx.stroke();
 }
 
-// Загружаем состояние при загрузке страницы
-window.onload = function() {
-  loadState();
-  updateProgressBar();
-};
-
-// Переключение страниц
-function switchPage(pageId) {
-  document.querySelectorAll('.page').forEach(page => {
-    page.style.display = 'none';
+// Функция для обновления самолётиков
+function updatePlanes() {
+  planes = planes.filter(plane => {
+    plane.x += plane.speedX;
+    plane.y += plane.speedY;
+    return plane.x > 0 && plane.x < canvas.width && plane.y > 0 && plane.y < canvas.height;
   });
-  document.getElementById(pageId).style.display = 'flex';
-
-  document.querySelectorAll('.nav-menu button').forEach(button => {
-    button.classList.remove('active');
-  });
-
-  document.querySelector(`[onclick="switchPage('${pageId}')"]`).classList.add('active');
 }
+
+// Функция для отрисовки самолётиков
+function drawPlanes() {
+  planes.forEach(plane => {
+    ctx.save();
+    ctx.translate(plane.x, plane.y);
+    ctx.rotate(plane.rotation);
+    ctx.drawImage(plane.img, -plane.img.width / 2, -plane.img.height / 2, 50, 50);
+    ctx.restore();
+  });
+}
+
+// Функция для анимации
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawHitbox();
+  updatePlanes();
+  drawPlanes();
+  requestAnimationFrame(animate);
+}
+
+// Обновление хитбокса при изменении размера окна
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  coinX = canvas.width / 2;
+  coinY = canvas.height / 2;
+  drawHitbox();
+});
+
+// Запуск анимации
+drawHitbox();
+animate();
