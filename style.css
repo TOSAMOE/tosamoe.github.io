@@ -80,18 +80,19 @@ body, html {
 }
 
 .central-coin-icon {
-  width: 360px;
+  width: 360px; /* Размер монетки */
   margin-bottom: 10px;
-  transition: transform 0.2s ease-in-out; /* Плавная анимация наклона */
+  transition: transform 0.3s ease-in-out; /* Плавная анимация наклона */
 }
 
 .coin-tilt-left {
-  transform: rotate(-10deg); /* Наклон влево */
+  transform: rotate(-15deg); /* Наклон влево */
 }
 
 .coin-tilt-right {
-  transform: rotate(10deg); /* Наклон вправо */
+  transform: rotate(15deg); /* Наклон вправо */
 }
+
 
 .energy {
   margin-top: 10px;
