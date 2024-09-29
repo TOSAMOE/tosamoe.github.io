@@ -148,8 +148,19 @@ body, html {
   }
 
   .central-coin-icon {
-    width: 300px; /* Чуть уменьшил для мобильных экранов */
-  }
+  width: 360px;
+  margin-bottom: 10px;
+  transition: transform 0.2s ease-in-out; /* Добавляем плавную анимацию */
+}
+
+/* Анимация наклона */
+.coin-tilt-left {
+  transform: rotate(-10deg); /* Наклон влево */
+}
+
+.coin-tilt-right {
+  transform: rotate(10deg); /* Наклон вправо */
+}
 
   .coins-display {
     font-size: 24px;
