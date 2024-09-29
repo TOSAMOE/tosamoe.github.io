@@ -42,12 +42,15 @@ function animateAirplane(x, y) {
   // Вычисляем угол направления полета с помощью Math.atan2
   const angle = Math.atan2(deltaY, deltaX); // Угол в радианах
 
+  // Если исходное изображение самолета направлено носом вверх, нужно скорректировать на 90 градусов
+  const adjustedAngle = angle - Math.PI / 2; // Коррекция на 90 градусов (вычитаем 90 градусов)
+
   // Устанавливаем начальное положение и поворот в одном действии
   airplane.style.left = `${x}px`;
   airplane.style.top = `${y}px`;
 
-  // Применяем поворот самолёта (добавляем 90 градусов для корректировки носа вверх)
-  airplane.style.transform = `rotate(${angle + Math.PI / 2}rad) translate(${randomX - x}px, ${randomY - y}px)`;
+  // Применяем поворот самолёта с коррекцией и его перемещение
+  airplane.style.transform = `rotate(${adjustedAngle}rad) translate(${randomX - x}px, ${randomY - y}px)`;
 
   // Плавное исчезновение после выхода за экран
   setTimeout(() => {
