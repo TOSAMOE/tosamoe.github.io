@@ -6,6 +6,7 @@
 
 body, html {
   height: 100%;
+  overflow: hidden; /* Убираем скролл полностью */
   font-family: Arial, sans-serif;
 }
 
@@ -13,9 +14,8 @@ body, html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   height: 100vh;
-  background-color: #333;
+  background: linear-gradient(to bottom, black, blue);
   color: white;
   text-align: center;
   position: relative;
@@ -23,49 +23,70 @@ body, html {
 
 .progress-bar {
   width: 80%;
-  height: 20px;
-  background-color: #555;
+  height: 8px;
+  background: #555;
   border-radius: 10px;
-  margin: 20px auto;
+  margin: 0 auto 10px;
 }
 
 .progress-bar-fill {
+  width: 50%;
   height: 100%;
-  background-color: #00f;
+  background: #00f;
   border-radius: 10px;
-  width: 0;
-  transition: width 0.25s;
 }
 
 .coins-display {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px;
+  font-size: 30px;
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
 .coin-icon {
-  width: 50px;
+  width: 60px;
+  vertical-align: middle;
   margin-right: 10px;
 }
 
-.level-display {
+.silver-level {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
-.level-icon {
-  width: 40px;
-  margin-right: 10px;
+.silver-icon {
+  width: 20px;
+  margin-right: 5px;
+}
+
+.page {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.earn-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 
 .central-coin-icon {
-  width: 100px;
-  cursor: pointer;
+  width: 360px;
+  margin-bottom: 10px;
+  transition: transform 0.1s ease-in-out;
+}
+
+.central-coin-icon:active {
+  transform: scale(0.9); /* При нажатии монетка уменьшится */
 }
 
 .energy {
@@ -74,16 +95,89 @@ body, html {
   color: #888;
 }
 
-#hitbox-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* Чтобы клики не мешали основным элементам */
+.nav-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Пример уровня */
+.nav-menu {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(51, 51, 51, 0.5);
+  padding: 10px 0;
+  width: 70%;
+  border-radius: 20px;
+}
+
+.nav-menu button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-icon {
+  width: 40px;
+  margin-bottom: 5px;
+}
+
+.boost-button {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.boost-icon {
+  width: 40px;
+}
+
+.airplane {
+  position: absolute;
+  width: 30px;
+  transition: transform 3s ease-in-out, opacity 1s ease-in-out;
+  opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .progress-bar {
+    margin: 10px auto;
+  }
+
+  .nav-menu {
+    width: 90%;
+  }
+
+  .central-coin-icon {
+    width: 300px;
+  }
+
+  .coins-display {
+    font-size: 24px;
+  }
+
+  .energy {
+    font-size: 18px;
+  }
+}
+
+button {
+  user-select: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
 .bronze { background-color: #cd7f32; }
 .silver { background-color: #c0c0c0; }
 .gold { background-color: #ffd700; }
