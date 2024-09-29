@@ -2,11 +2,13 @@ let coins = 0;
 let energy = 4000;
 const maxEnergy = 4000;
 
+// Сохранение состояния
 function saveState() {
   localStorage.setItem('coins', coins);
   localStorage.setItem('energy', energy);
 }
 
+// Загрузка состояния
 function loadState() {
   const savedCoins = localStorage.getItem('coins');
   const savedEnergy = localStorage.getItem('energy');
@@ -28,27 +30,32 @@ function animateAirplane(x, y) {
   const airplane = document.createElement('img');
   airplane.src = 'plane-icon.png'; // Иконка самолёта
   airplane.classList.add('airplane');
+  airplane.style.position = 'absolute';
   airplane.style.left = `${x}px`;
   airplane.style.top = `${y}px`;
 
   document.body.appendChild(airplane);
 
-  // Случайное направление полёта
+  // Случайное направление полёта (векторы смещения)
   const randomX = (Math.random() - 0.5) * window.innerWidth * 2; // Увеличенные значения для выхода за экран
   const randomY = (Math.random() - 0.5) * window.innerHeight * 2;
 
-  // Вычисляем угол между точкой клика и направлением полёта
+  // Вычисляем угол полёта самолёта
   const deltaX = randomX;
   const deltaY = randomY;
-  const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Преобразуем радианы в градусы
+  const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI); // Угол в градусах
 
-  // Поворачиваем самолёт в направлении полёта (угол поворота -90, чтобы компенсировать ориентацию вверх)
-  airplane.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${angle - 90}deg)`;
+  // Поворачиваем самолёт в направлении полёта (учитываем изначальное направление вверх)
+  airplane.style.transform = `rotate(${angle - 90}deg)`;
+
+  // Анимация полёта самолёта (выполнение трансформации полёта)
+  airplane.style.transition = 'transform 3s linear, opacity 0.5s ease-out';
+  airplane.style.transform += ` translate(${randomX}px, ${randomY}px)`;
 
   // Плавное исчезновение после выхода за экран
   setTimeout(() => {
     airplane.style.opacity = 0;
-  }, 2500); // Самолётик будет плавать около 2.5 сек
+  }, 2500); // Самолётик исчезает через 2.5 секунды
 
   // Удаление самолётика после 3 секунд
   setTimeout(() => {
@@ -56,6 +63,7 @@ function animateAirplane(x, y) {
   }, 3000);
 }
 
+// Функция для клика и заработка монет
 function earnCoins(event) {
   if (energy > 0) {
     coins++;
@@ -64,10 +72,10 @@ function earnCoins(event) {
     document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
     saveState();
 
+    // Запуск анимации самолётика
     const x = event.clientX;
     const y = event.clientY;
-
-    animateAirplane(x, y); // Запускаем анимацию самолётика
+    animateAirplane(x, y);
   }
 }
 
@@ -75,6 +83,7 @@ window.onload = function() {
   loadState();
 };
 
+// Переключение страниц
 function switchPage(pageId) {
   document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
