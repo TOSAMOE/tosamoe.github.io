@@ -40,7 +40,7 @@ function loadState() {
 
   // Рассчитаем, сколько времени прошло с момента последнего обновления энергии
   const timeElapsed = (Date.now() - lastUpdateTime) / 1000; // В секундах
-  const energyToRestore = Math.floor(timeElapsed * 5); // Количество единиц энергии для восстановления (5 единиц в секунду)
+  const energyToRestore = Math.floor(timeElapsed * 2); // Количество единиц энергии для восстановления (5 единиц в секунду)
 
   // Восстанавливаем энергию с учётом максимального значения
   energy = Math.min(maxEnergy, energy + energyToRestore);
@@ -58,7 +58,7 @@ function restoreEnergy() {
 }
 
 // Запускаем восстановление энергии каждые 0.2 секунды
-setInterval(restoreEnergy, 200);
+setInterval(restoreEnergy, 500);
 
 // Функция заработка монет
 function earnCoins() {
