@@ -76,4 +76,6 @@ function switchPage(pageId) {
   document.getElementById(pageId).style.display = 'flex';
 
   document.querySelectorAll('.nav-menu button').forEach(button => {
-    button.classList
+    button.classList.remove('active'); });
+
+document.querySelector([onclick="switchPage('${pageId}')"]).classList.add('active'); }
