@@ -14,7 +14,7 @@ body, html {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh; /* Фиксированная высота для мобильных экранов */
+  height: 100vh;
   background: linear-gradient(to bottom, black, blue);
   color: white;
   text-align: center;
@@ -25,11 +25,11 @@ body, html {
   height: 8px;
   background: #555;
   border-radius: 10px;
-  margin: 0 auto 10px; /* Центрируем progress bar */
+  margin: 0 auto 10px;
 }
 
 .progress-bar-fill {
-  width: 50%; /* Пример заполнения */
+  width: 50%;
   height: 100%;
   background: #00f;
   border-radius: 10px;
@@ -48,7 +48,6 @@ body, html {
   width: 60px;
   vertical-align: middle;
   margin-right: 10px;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)); /* Мягкое свечение */
 }
 
 .silver-level {
@@ -80,19 +79,14 @@ body, html {
 }
 
 .central-coin-icon {
-  width: 360px; /* Размер монетки */
+  width: 360px;
   margin-bottom: 10px;
-  transition: transform 0.3s ease-in-out; /* Плавная анимация наклона */
+  transition: transform 0.1s ease-in-out; /* Плавное увеличение */
 }
 
-.coin-tilt-left {
-  transform: rotate(-15deg); /* Наклон влево */
+.central-coin-icon:active {
+  transform: scale(0.9); /* При нажатии монетка уменьшится */
 }
-
-.coin-tilt-right {
-  transform: rotate(15deg); /* Наклон вправо */
-}
-
 
 .energy {
   margin-top: 10px;
@@ -110,9 +104,9 @@ body, html {
 .nav-menu {
   display: flex;
   justify-content: space-between;
-  background-color: rgba(51, 51, 51, 0.5); /* Полупрозрачное меню */
+  background-color: rgba(51, 51, 51, 0.5);
   padding: 10px 0;
-  width: 70%; /* Сужаем нижнее меню */
+  width: 70%;
   border-radius: 20px;
 }
 
@@ -148,7 +142,6 @@ body, html {
 }
 
 @media (max-width: 600px) {
-  /* Адаптация для мобильных устройств */
   .progress-bar {
     margin: 10px auto;
   }
@@ -157,16 +150,9 @@ body, html {
     width: 90%;
   }
 
- .central-coin-icon {
-  width: 360px;
-  margin-bottom: 10px;
-  transition: transform 0.2s ease; /* Плавная анимация */
-}
-
-.central-coin-icon:active {
-  transform: scale(0.9); /* Уменьшаем монетку при нажатии */
-}
-
+  .central-coin-icon {
+    width: 300px;
+  }
 
   .coins-display {
     font-size: 24px;
@@ -177,13 +163,9 @@ body, html {
   }
 }
 
-/* Стили для всех кнопок */
 button {
-  user-select: none; /* Отключает возможность выделять текст */
-  outline: none; /* Убирает фокусную рамку при клике */
-  -webkit-tap-highlight-color: transparent; /* Убирает "подсветку" при нажатии на мобильных устройствах */
-  -webkit-user-select: none; /* Отключает выделение текста в WebKit */
-  -moz-user-select: none; /* Отключает выделение текста в Firefox */
-  -ms-user-select: none; /* Отключает выделение текста в IE */
-  cursor: pointer; /* Меняет указатель на руку */
+  user-select: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
