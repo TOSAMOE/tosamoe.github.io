@@ -37,7 +37,15 @@ function animateAirplane(x, y) {
   const randomX = (Math.random() - 0.5) * window.innerWidth * 2; // Увеличенные значения для выхода за экран
   const randomY = (Math.random() - 0.5) * window.innerHeight * 2;
 
-  airplane.style.transform = `translate(${randomX}px, ${randomY}px)`;
+  // Вычисляем разницу по координатам
+  const deltaX = randomX - x;
+  const deltaY = randomY - y;
+
+  // Вычисляем угол поворота самолёта с помощью Math.atan2
+  const angle = Math.atan2(deltaY, deltaX); // Угол в радианах
+
+  // Применяем поворот самолёта
+  airplane.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${angle}rad)`;
 
   // Плавное исчезновение после выхода за экран
   setTimeout(() => {
@@ -76,6 +84,8 @@ function switchPage(pageId) {
   document.getElementById(pageId).style.display = 'flex';
 
   document.querySelectorAll('.nav-menu button').forEach(button => {
-    button.classList.remove('active'); });
+    button.classList.remove('active');
+  });
 
-document.querySelector([onclick="switchPage('${pageId}')"]).classList.add('active'); }
+  document.querySelector(`[onclick="switchPage('${pageId}')"]`).classList.add('active');
+}
