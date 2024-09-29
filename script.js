@@ -31,21 +31,27 @@ function animateAirplane(x, y) {
   airplane.style.left = `${x}px`;
   airplane.style.top = `${y}px`;
 
+  // Добавляем самолётик на страницу
   document.body.appendChild(airplane);
 
   // Случайное направление полёта
   const randomX = (Math.random() - 0.5) * window.innerWidth * 2; // Увеличенные значения для выхода за экран
   const randomY = (Math.random() - 0.5) * window.innerHeight * 2;
 
-  // Вычисляем разницу по координатам
+  // Вычисляем разницу по координатам для определения угла
   const deltaX = randomX - x;
   const deltaY = randomY - y;
 
-  // Вычисляем угол поворота самолёта с помощью Math.atan2
+  // Вычисляем угол направления полета с помощью Math.atan2
   const angle = Math.atan2(deltaY, deltaX); // Угол в радианах
 
-  // Применяем поворот самолёта (добавляем 90 градусов для корректировки направления носа)
-  airplane.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${angle + Math.PI / 2}rad)`;
+  // Применяем поворот самолёта (добавляем 90 градусов для корректировки носа вверх)
+  airplane.style.transform = `rotate(${angle + Math.PI / 2}rad)`;
+
+  // Перемещение самолета
+  setTimeout(() => {
+    airplane.style.transform += ` translate(${randomX - x}px, ${randomY - y}px)`; // Перемещаем самолётик
+  }, 10); // С небольшой задержкой для плавного старта
 
   // Плавное исчезновение после выхода за экран
   setTimeout(() => {
