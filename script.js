@@ -1,5 +1,6 @@
 let coins = 0;
 let energy = 4000;
+const maxEnergy = 4000;
 
 // Функция для загрузки данных из LocalStorage
 function loadState() {
@@ -7,13 +8,13 @@ function loadState() {
   const savedEnergy = localStorage.getItem('energy');
 
   if (savedCoins !== null) {
-    coins = parseInt(savedCoins);
+    coins = parseInt(savedCoins, 10);
     document.getElementById("coin-count").innerText = coins;
   }
 
   if (savedEnergy !== null) {
-    energy = parseInt(savedEnergy);
-    document.getElementById("energy-count").innerText = energy;
+    energy = parseInt(savedEnergy, 10);
+    document.getElementById("energy-count").innerText = `${energy}/${maxEnergy}`;
   }
 }
 
@@ -29,7 +30,7 @@ function earnCoins() {
     coins++;
     energy--;
     document.getElementById("coin-count").innerText = coins;
-    document.getElementById("energy-count").innerText = energy;
+    document.getElementById("energy-count").innerText = `${energy}/${maxEnergy}`;
     saveState(); // Сохраняем текущее состояние после изменений
   } else {
     alert("Out of energy!");
@@ -46,15 +47,22 @@ coinIcon.addEventListener('mousedown', (e) => {
 
   // Проверка на положение клика: влево или вправо
   if (x < midpoint) {
-    coinIcon.style.transform = 'rotate(-10deg)'; // Наклон влево
+    coinIcon.classList.add('coin-tilt-left');
   } else {
-    coinIcon.style.transform = 'rotate(10deg)'; // Наклон вправо
+    coinIcon.classList.add('coin-tilt-right');
   }
 });
 
 coinIcon.addEventListener('mouseup', () => {
-  // Возвращаем монетку в исходное положение
-  coinIcon.style.transform = 'rotate(0deg)';
+  // Убираем наклон после отпускания
+  coinIcon.classList.remove('coin-tilt-left');
+  coinIcon.classList.remove('coin-tilt-right');
+});
+
+coinIcon.addEventListener('mouseleave', () => {
+  // Сбрасываем анимацию, если курсор покинул область монетки
+  coinIcon.classList.remove('coin-tilt-left');
+  coinIcon.classList.remove('coin-tilt-right');
 });
 
 // Функция для переключения страниц
