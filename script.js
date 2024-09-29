@@ -4,6 +4,15 @@ const maxEnergy = 4000;
 const restoreRate = 0.2; // Восстанавливать энергию каждые 0.2 секунды (1 единица)
 let lastUpdateTime = Date.now();
 
+const levels = [
+  { name: "Bronze", minClicks: 0, maxClicks: 1000 },
+  { name: "Silver", minClicks: 1000, maxClicks: 2000 },
+  { name: "Gold", minClicks: 2000, maxClicks: 3000 },
+  { name: "Platinum", minClicks: 3000, maxClicks: 4000 },
+  { name: "Emerald", minClicks: 4000, maxClicks: 5000 },
+  { name: "Diamond", minClicks: 5000, maxClicks: Infinity },
+];
+
 // Сохранение данных
 function saveState() {
   localStorage.setItem('coins', coins);
@@ -36,15 +45,14 @@ function loadState() {
   // Восстанавливаем энергию с учётом максимального значения
   energy = Math.min(maxEnergy, energy + energyToRestore);
 
-  document.getElementById('coin-count').innerText = coins;
-  document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
+  updateDisplay();
 }
 
 // Функция восстановления энергии
 function restoreEnergy() {
   if (energy < maxEnergy) {
     energy = Math.min(maxEnergy, energy + 1); // Восстанавливаем 1 единицу энергии
-    document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
+    updateDisplay();
     saveState(); // Сохраняем обновленное значение энергии
   }
 }
@@ -57,8 +65,8 @@ function earnCoins() {
   if (energy > 0) {
     coins++;
     energy--;
-    document.getElementById('coin-count').innerText = coins;
-    document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
+    updateProgressBar();
+    updateDisplay();
     saveState();
     
     // Вибрация на мобильных устройствах
@@ -68,9 +76,31 @@ function earnCoins() {
   }
 }
 
+// Обновление прогресс-бара и уровня
+function updateProgressBar() {
+  const currentLevel = Math.floor(coins / 1000); // Каждый уровень состоит из 1000 кликов
+  const clicksInCurrentLevel = coins % 1000; // Остаток кликов в текущем уровне
+  const progress = (clicksInCurrentLevel / 1000) * 100; // Процент заполнения
+
+  document.getElementById('progress-bar-fill').style.width = `${progress}%`;
+
+  // Обновляем уровень
+  const currentRank = levels.find(level => coins >= level.minClicks && coins < level.maxClicks);
+  if (currentRank) {
+    document.querySelector('.silver-level span').innerText = currentRank.name;
+  }
+}
+
+// Функция обновления отображаемых данных
+function updateDisplay() {
+  document.getElementById('coin-count').innerText = coins;
+  document.getElementById('energy-count').innerText = `${energy}/${maxEnergy}`;
+}
+
 // Загружаем состояние при загрузке страницы
 window.onload = function() {
   loadState();
+  updateProgressBar();
 };
 
 // Переключение страниц
