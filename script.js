@@ -34,6 +34,9 @@ function animateAirplane(x, y) {
   airplane.style.left = `${x}px`;
   airplane.style.top = `${y}px`;
 
+  // Отключаем клики по самолёту
+  airplane.style.pointerEvents = 'none';
+
   document.body.appendChild(airplane);
 
   // Случайное направление движения самолёта
@@ -44,7 +47,7 @@ function animateAirplane(x, y) {
 
   // Устанавливаем поворот самолёта по направлению его движения
   const angleDeg = angleRad * (180 / Math.PI); // Угол в градусах
-  airplane.style.transform = `rotate(${angleDeg + 90}deg)`; // Поворот самолёта (плюс 90 для учёта ориентации иконки)
+  airplane.style.transform = `rotate(${angleDeg + 90}deg)`; // Поворот самолёта
 
   // Запускаем анимацию самолёта
   let posX = x;
@@ -66,6 +69,7 @@ function animateAirplane(x, y) {
 
   moveAirplane();
 }
+
 
 // Функция для заработка монет и запуска самолётика
 function earnCoins(event) {
