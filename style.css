@@ -18,6 +18,7 @@ body, html {
   background: linear-gradient(to bottom, black, blue);
   color: white;
   text-align: center;
+  position: relative; /* Для размещения самолётиков */
 }
 
 .progress-bar {
@@ -81,7 +82,7 @@ body, html {
 .central-coin-icon {
   width: 360px;
   margin-bottom: 10px;
-  transition: transform 0.1s ease-in-out; /* Плавное увеличение */
+  transition: transform 0.1s ease-in-out;
 }
 
 .central-coin-icon:active {
@@ -139,6 +140,12 @@ body, html {
 
 .boost-icon {
   width: 40px;
+}
+
+.airplane {
+  position: absolute;
+  width: 30px;
+  transition: transform 2s linear;
 }
 
 @media (max-width: 600px) {
