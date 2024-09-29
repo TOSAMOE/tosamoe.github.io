@@ -44,18 +44,17 @@ coinIcon.addEventListener('mousedown', (e) => {
   const x = e.clientX - rect.left; // Получаем координаты клика относительно монетки
   const midpoint = rect.width / 2;
 
+  // Проверка на положение клика: влево или вправо
   if (x < midpoint) {
-    // Наклон влево
-    coinIcon.classList.add('coin-tilt-left');
+    coinIcon.style.transform = 'rotate(-10deg)'; // Наклон влево
   } else {
-    // Наклон вправо
-    coinIcon.classList.add('coin-tilt-right');
+    coinIcon.style.transform = 'rotate(10deg)'; // Наклон вправо
   }
 });
 
 coinIcon.addEventListener('mouseup', () => {
-  // Убираем наклон при отпускании кнопки
-  coinIcon.classList.remove('coin-tilt-left', 'coin-tilt-right');
+  // Возвращаем монетку в исходное положение
+  coinIcon.style.transform = 'rotate(0deg)';
 });
 
 // Функция для переключения страниц
