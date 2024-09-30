@@ -14,16 +14,14 @@ const levels = [
 const progressBarFill = document.getElementById('progress-bar-fill');
 const coinCountElement = document.getElementById('coin-count');
 const energyCountElement = document.getElementById('energy-count');
-const levelNameElement = document.querySelector('.silver-level span'); // Используем этот элемент для отображения уровня
-const levelIconElement = document.querySelector('.silver-level img'); // Используем этот элемент для отображения иконки уровня
+const levelNameElement = document.querySelector('.silver-level span');
+const levelIconElement = document.querySelector('.silver-level img');
 
-// Функция для сохранения состояния
 function saveState() {
   localStorage.setItem('coins', coins);
   localStorage.setItem('energy', energy);
 }
 
-// Функция для загрузки состояния
 function loadState() {
   const savedCoins = localStorage.getItem('coins');
   const savedEnergy = localStorage.getItem('energy');
@@ -42,7 +40,6 @@ function loadState() {
   updateProgressBar();
 }
 
-// Функция для обновления уровня
 function updateLevel() {
   for (let level of levels) {
     if (coins < level.max) {
@@ -53,40 +50,34 @@ function updateLevel() {
   }
 }
 
-// Функция для обновления прогресс-бара
 function updateProgressBar() {
   const progress = (coins % 1000) / 1000 * 100;
   progressBarFill.style.width = `${progress}%`;
 }
 
-// Анимация для самолётиков
 function animateAirplane(x, y) {
   const airplane = document.createElement('img');
-  airplane.src = 'plane-icon.png'; // Иконка самолёта
+  airplane.src = 'plane-icon.png';
   airplane.classList.add('airplane');
   airplane.style.left = `${x}px`;
   airplane.style.top = `${y}px`;
 
   document.body.appendChild(airplane);
 
-  // Случайное направление полёта
-  const randomX = (Math.random() - 0.5) * window.innerWidth * 2; // Увеличенные значения для выхода за экран
+  const randomX = (Math.random() - 0.5) * window.innerWidth * 2;
   const randomY = (Math.random() - 0.5) * window.innerHeight * 2;
 
   airplane.style.transform = `translate(${randomX}px, ${randomY}px)`;
 
-  // Плавное исчезновение после выхода за экран
   setTimeout(() => {
     airplane.style.opacity = 0;
-  }, 2500); // Самолётик будет плавать около 2.5 сек
+  }, 2500);
 
-  // Удаление самолётика после 3 секунд
   setTimeout(() => {
     airplane.remove();
   }, 3000);
 }
 
-// Обработка клика на монету
 function earnCoins(event) {
   if (energy > 0) {
     coins++;
@@ -98,19 +89,17 @@ function earnCoins(event) {
     const x = event.clientX;
     const y = event.clientY;
 
-    animateAirplane(x, y); // Запускаем анимацию самолётика
+    animateAirplane(x, y);
 
-    updateProgressBar(); // Обновляем прогресс бар
-    updateLevel(); // Обновляем уровень
+    updateProgressBar();
+    updateLevel();
   }
 }
 
-// Загрузка состояния при загрузке страницы
 window.onload = function() {
   loadState();
 };
 
-// Переключение страниц
 function switchPage(pageId) {
   document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
