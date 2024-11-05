@@ -1,3 +1,19 @@
+document.addEventListener("DOMContentLoaded", () => {
+    // Когда анимация заголовка завершится, показать основной контент
+    setTimeout(() => {
+        document.querySelector(".intro-screen").style.opacity = "0";
+        setTimeout(() => {
+            document.querySelector(".intro-screen").style.display = "none";
+            document.getElementById("mainContent").style.display = "block";
+        }, 1500);
+    }, 4000);
+});
+
+function toggleSupportModal() {
+    const modal = document.getElementById("supportModal");
+    modal.style.display = modal.style.display === "none" ? "flex" : "none";
+}
+
 function openSupportModal() {
     document.getElementById("supportModal").style.display = "flex";
 }
