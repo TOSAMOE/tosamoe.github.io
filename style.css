@@ -15,7 +15,7 @@
     cursor: pointer;
 }
 
-/* Иконка поддержки */
+/* Кнопка поддержки */
 .support-icon {
     position: fixed;
     bottom: 20px;
@@ -74,6 +74,7 @@
 /* Поля формы */
 .support-modal-content input,
 .support-modal-content textarea {
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 8px;
