@@ -1,29 +1,37 @@
-const chatbox = document.getElementById('chatbox');
-const userInput = document.getElementById('userInput');
-
-function sendMessage() {
-    const userMessage = userInput.value.trim();
-    if (!userMessage) return;
-
-    appendMessage("Вы", userMessage);
-    userInput.value = '';
-
-    // Замените на свою логику или подключение к API
-    setTimeout(() => {
-        let botReply = generateBotReply(userMessage);
-        appendMessage("Бот", botReply);
-    }, 500);
+function openSupportModal() {
+    document.getElementById("supportModal").style.display = "flex";
 }
 
-function appendMessage(sender, text) {
-    const message = document.createElement('div');
-    message.className = 'message';
-    message.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    chatbox.appendChild(message);
-    chatbox.scrollTop = chatbox.scrollHeight;
+function closeSupportModal() {
+    document.getElementById("supportModal").style.display = "none";
 }
 
-function generateBotReply(message) {
-    // Здесь можно добавить обработку на основе ключевых слов или базовую логику
-    return "Это тестовый ответ.";
+async function sendMessageToSupport(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("userName").value || "Анонимно";
+    const email = document.getElementById("userEmail").value;
+    const message = document.getElementById("userMessage").value;
+
+    const data = {
+        name: name,
+        email: email,
+        message: message
+    };
+
+    // Отправляем данные на сервер
+    const response = await fetch("https://your-server-url/sendMessage", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+        alert("Сообщение отправлено! Ожидайте ответа.");
+        closeSupportModal();
+    } else {
+        alert("Ошибка при отправке сообщения. Пожалуйста, попробуйте снова.");
+    }
 }
