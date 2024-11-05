@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Магазин</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Добро пожаловать!</h1>
-        <div class="buttons">
-            <a href="#menu" class="button">Меню</a>
-            <a href="#tariffs" class="button">Тарифы</a>
-            <a href="#about" class="button">О нас</a>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+<!-- Иконка поддержки в правом нижнем углу -->
+<div class="support-icon" onclick="openSupportModal()">💬</div>
+
+<!-- Модальное окно для формы -->
+<div id="supportModal" class="support-modal">
+  <div class="support-modal-content">
+    <span class="close" onclick="closeSupportModal()">&times;</span>
+    <h2>Связаться с поддержкой</h2>
+    
+    <form id="supportForm" onsubmit="sendMessageToSupport(event)">
+      <label for="userName">Имя:</label>
+      <input type="text" id="userName" placeholder="Анонимно" />
+
+      <label for="userEmail">Почта:</label>
+      <input type="email" id="userEmail" placeholder="example@mail.com" required />
+
+      <label for="userMessage">Ваш вопрос:</label>
+      <textarea id="userMessage" required></textarea>
+      
+      <button type="submit">Отправить</button>
+    </form>
+  </div>
+</div>
