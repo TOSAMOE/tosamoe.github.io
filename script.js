@@ -35,3 +35,4 @@ async function sendMessageToChatGPT(event) {
         document.getElementById("responseArea").innerText = "Ошибка при отправке сообщения. Попробуйте снова.";
     }
 }
+
