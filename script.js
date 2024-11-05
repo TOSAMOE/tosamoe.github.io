@@ -16,7 +16,7 @@ async function sendMessageToChatGPT(event) {
     const data = {
         prompt: `${name} спрашивает: ${message}`,
         max_tokens: 100,
-        model: "text-davinci-003" // Укажите нужную модель ChatGPT
+        model: "text-davinci-003"
     };
 
     try {
@@ -35,4 +35,3 @@ async function sendMessageToChatGPT(event) {
         document.getElementById("responseArea").innerText = "Ошибка при отправке сообщения. Попробуйте снова.";
     }
 }
-
