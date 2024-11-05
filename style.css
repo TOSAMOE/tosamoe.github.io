@@ -1,4 +1,4 @@
-/* Устанавливаем базовые стили */
+/* Базовые стили */
 * {
     margin: 0;
     padding: 0;
@@ -12,19 +12,19 @@ body, html {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    background: linear-gradient(120deg, #ff6f61, #ff9a8b, #ff8c69, #f0e68c);
-    background-size: 300% 300%;
-    animation: gradient 10s ease infinite;
+    background: linear-gradient(120deg, #ff6f91, #ff9671, #ffc75f, #f9f871, #845ec2, #d65db1);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
 }
 
-/* Анимация для переливающегося градиента */
+/* Анимация для плавного переливающегося градиента */
 @keyframes gradient {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* Стили контейнера */
+/* Центрирование содержимого */
 .container {
     text-align: center;
     color: #ffffff;
@@ -34,10 +34,10 @@ body, html {
 h1 {
     font-size: 3em;
     margin-bottom: 40px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Стили кнопок */
+/* Стили для кнопок в Glassmorphism-стиле */
 .buttons {
     display: flex;
     gap: 15px;
@@ -45,18 +45,20 @@ h1 {
 }
 
 .button {
-    background-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     padding: 15px 30px;
-    border-radius: 25px;
+    border-radius: 30px;
     text-decoration: none;
     font-size: 1.2em;
     font-weight: bold;
-    transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
 }
 
 .button:hover {
-    background-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
 }
