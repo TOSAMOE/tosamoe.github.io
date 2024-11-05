@@ -1,18 +1,51 @@
+/* Градиентный фон */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffcf7d, #ff8c81, #ff65a3);
+    background-size: 300% 300%;
+    animation: gradientAnimation 8s ease infinite;
+    font-family: Arial, sans-serif;
+}
+
+/* Анимация градиента */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 /* Основной контент */
 .content {
     text-align: center;
-    margin-top: 50px;
+    color: #ffffff;
 }
 
-.buttons button {
-    margin: 10px;
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+/* Стиль гласс-морфизма для кнопок */
+.glass-button {
     padding: 10px 20px;
+    margin: 10px;
     border-radius: 12px;
-    background-color: #ff9671;
-    color: white;
-    border: none;
     font-size: 18px;
+    border: none;
     cursor: pointer;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+}
+
+.glass-button:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* Кнопка поддержки */
@@ -20,7 +53,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #ff9671;
+    background: #ff8c81;
     color: white;
     font-size: 1.5em;
     padding: 15px;
@@ -48,9 +81,9 @@
     align-items: center;
 }
 
-/* Содержимое модального окна */
-.support-modal-content {
-    background: rgba(255, 255, 255, 0.25);
+/* Содержимое модального окна с гласс-морфизмом */
+.support-modal-content.glass-form {
+    background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
     border-radius: 16px;
     padding: 30px;
@@ -60,6 +93,7 @@
     color: #333;
     text-align: center;
     position: relative;
+    color: #fff;
 }
 
 /* Закрытие окна */
@@ -80,8 +114,9 @@
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.2);
-    color: #333;
+    color: #fff;
     font-size: 16px;
+    outline: none;
 }
 
 /* Ответное сообщение */
@@ -90,6 +125,6 @@
     padding: 10px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
-    color: #333;
+    color: #fff;
     font-size: 16px;
 }
