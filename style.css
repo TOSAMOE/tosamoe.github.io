@@ -28,19 +28,22 @@ body, html {
 .container {
     text-align: center;
     color: #ffffff;
+    max-width: 800px; /* Увеличиваем ширину контейнера */
+    padding: 20px; /* Добавляем немного отступов */
 }
 
 /* Стили заголовка */
 h1 {
     font-size: 3em;
-    margin-bottom: 40px;
+    margin-bottom: 50px; /* Увеличиваем отступ снизу */
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    margin-top: -80px; /* Поднимаем заголовок выше */
 }
 
 /* Стили для кнопок в Glassmorphism-стиле */
 .buttons {
     display: flex;
-    gap: 15px;
+    gap: 20px; /* Увеличиваем расстояние между кнопками */
     justify-content: center;
 }
 
@@ -48,14 +51,14 @@ h1 {
     background: rgba(255, 255, 255, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
-    padding: 15px 30px;
+    padding: 20px 40px; /* Увеличиваем размеры кнопок */
     border-radius: 30px;
     text-decoration: none;
     font-size: 1.2em;
     font-weight: bold;
     transition: background 0.3s, transform 0.3s;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px); /* Уменьшаем размытие, чтобы кнопки выглядели чётче */
 }
 
 .button:hover {
