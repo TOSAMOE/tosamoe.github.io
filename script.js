@@ -6,7 +6,7 @@ function closeSupportModal() {
     document.getElementById("supportModal").style.display = "none";
 }
 
-async function sendMessageToSupport(event) {
+async function sendMessageToChatGPT(event) {
     event.preventDefault();
 
     const name = document.getElementById("userName").value || "Анонимно";
@@ -14,24 +14,24 @@ async function sendMessageToSupport(event) {
     const message = document.getElementById("userMessage").value;
 
     const data = {
-        name: name,
-        email: email,
-        message: message
+        prompt: `${name} спрашивает: ${message}`,
+        max_tokens: 100,
+        model: "text-davinci-003" // Укажите нужную модель ChatGPT
     };
 
-    // Отправляем данные на сервер
-    const response = await fetch("https://your-server-url/sendMessage", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
+    try {
+        const response = await fetch("https://api.openai.com/v1/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer YOUR_OPENAI_API_KEY`
+            },
+            body: JSON.stringify(data)
+        });
 
-    if (response.ok) {
-        alert("Сообщение отправлено! Ожидайте ответа.");
-        closeSupportModal();
-    } else {
-        alert("Ошибка при отправке сообщения. Пожалуйста, попробуйте снова.");
+        const result = await response.json();
+        document.getElementById("responseArea").innerText = `Ответ: ${result.choices[0].text}`;
+    } catch (error) {
+        document.getElementById("responseArea").innerText = "Ошибка при отправке сообщения. Попробуйте снова.";
     }
 }
