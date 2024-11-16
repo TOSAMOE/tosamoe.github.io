@@ -8,35 +8,39 @@
 </head>
 <body>
 
-    <!-- Логотип с анимацией при загрузке -->
+    <!-- Прелоадер -->
     <div id="preloader">
-        <img src="logo.png" alt="PixWave Logo" id="logo">
+        <img src="logo.png" alt="PixWave Logo" id="preloader-logo">
+        <div id="blur-overlay"></div>
     </div>
+
+    <!-- Навигационная панель -->
+    <header>
+        <a href="https://tosamoe.github.io" class="logo-link">
+            <img src="logo.png" alt="PixWave Logo" class="header-logo">
+        </a>
+    </header>
 
     <!-- Основное содержимое сайта -->
-    <div id="main-content" class="hidden">
-        <h1>Добро пожаловать в PixWave Studio</h1>
-        <p>Мы создаём уникальные и качественные сайты, которые помогают вашему бизнесу расти и привлекать клиентов.</p>
-        
-        <!-- Преимущества -->
-        <div class="advantages">
-            <div class="advantage-card">
-                <h3>Индивидуальный подход</h3>
-                <p>Каждый сайт создаётся с учётом уникальных потребностей клиента.</p>
+    <main>
+        <h1 class="neon-text">Наши услуги</h1>
+        <div class="services">
+            <!-- Блок 1 -->
+            <div class="service-card">
+                <h2>Лендинг</h2>
+                <p>Одностраничный сайт с уникальным дизайном и анимацией.</p>
+                <span class="price">5,000 ₽</span>
+                <button class="neon-button">Добавить в корзину</button>
             </div>
-            <div class="advantage-card">
-                <h3>Современный дизайн</h3>
-                <p>Используем новейшие технологии и тренды в веб-дизайне.</p>
-            </div>
-            <div class="advantage-card">
-                <h3>Оптимизация под SEO</h3>
-                <p>Ваш сайт будет легко находиться в поисковых системах.</p>
+            <!-- Блок 2 -->
+            <div class="service-card">
+                <h2>Интернет-магазин</h2>
+                <p>Функциональный сайт для продаж товаров и услуг.</p>
+                <span class="price">15,000 ₽</span>
+                <button class="neon-button">Добавить в корзину</button>
             </div>
         </div>
-
-        <!-- Кнопка -->
-        <button class="glass-button">Заказать сайт</button>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
