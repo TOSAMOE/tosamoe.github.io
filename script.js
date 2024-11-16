@@ -1,20 +1,16 @@
 window.addEventListener('load', () => {
     const preloader = document.getElementById('preloader');
-    const logo = document.getElementById('logo');
-    const mainContent = document.getElementById('main-content');
+    const blurOverlay = document.getElementById('blur-overlay');
+    const mainContent = document.querySelector('main');
 
-    // Плавное появление логотипа
-    logo.style.opacity = '1';
-
-    // Ждем завершения анимации логотипа
+    // Уменьшаем размытие и скрываем логотип после загрузки
     setTimeout(() => {
+        blurOverlay.style.backdropFilter = 'blur(0px)';
         preloader.style.opacity = '0';
 
-        // Плавный переход к основному содержимому
         setTimeout(() => {
-            preloader.classList.add('hidden');
-            mainContent.classList.remove('hidden');
+            preloader.style.display = 'none';
             mainContent.style.opacity = '1';
         }, 1000);
-    }, 3000);
+    }, 2000);
 });
