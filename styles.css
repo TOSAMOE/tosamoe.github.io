@@ -28,6 +28,7 @@ body {
 
 #preloader-logo {
     width: 150px;
+    z-index: 1001;
     animation: fadeIn 2s forwards, scaleUp 2s forwards;
 }
 
@@ -38,6 +39,7 @@ body {
     width: 100%;
     height: 100%;
     backdrop-filter: blur(20px);
+    z-index: 1000;
     transition: backdrop-filter 1s ease;
 }
 
@@ -75,9 +77,10 @@ main {
     border-radius: 200px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
-    border: 2px solid;
-    border-image: linear-gradient(90deg, #00f, #0f0) 1;
+    border: 2px solid transparent;
+    background-clip: padding-box;
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    border-image: linear-gradient(90deg, #00f, #0f0) 1;
 }
 
 .service-card {
@@ -87,37 +90,37 @@ main {
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     text-align: center;
     color: #fff;
-}
-
-.service-card h2 {
-    margin-bottom: 10px;
-}
-
-.price {
-    color: #0f0;
-    font-size: 18px;
 }
 
 .neon-button {
     margin-top: 10px;
     padding: 10px 20px;
-    border: none;
+    border: 2px solid transparent;
     border-radius: 20px;
     color: #fff;
-    background: rgba(255, 255, 255, 0.2);
+    background: #111;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
+    animation: neon-glow 3s infinite;
 }
 
 .neon-button:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
     box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
 }
 
-/* Анимации */
+/* Анимация неона по краям кнопки */
+@keyframes neon-glow {
+    0% {
+        box-shadow: 0 0 5px #0ff;
+    }
+    100% {
+        box-shadow: 0 0 15px #0ff, 0 0 25px #0ff;
+    }
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;
