@@ -3,44 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ваш Магазин</title>
+    <title>PixWave Studio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Основной контент сайта -->
-    <div class="content">
-        <h1>Добро пожаловать!</h1>
-        <div class="buttons">
-            <button>Меню</button>
-            <button>Тарифы</button>
-            <button>О нас</button>
-        </div>
+
+    <!-- Логотип с анимацией при загрузке -->
+    <div id="preloader">
+        <img src="logo.png" alt="PixWave Logo" id="logo">
     </div>
 
-    <!-- Кнопка поддержки в правом нижнем углу -->
-    <div class="support-icon" onclick="openSupportModal()">💬</div>
-
-    <!-- Модальное окно поддержки -->
-    <div id="supportModal" class="support-modal">
-        <div class="support-modal-content">
-            <span class="close" onclick="closeSupportModal()">&times;</span>
-            <h2>Связаться с поддержкой</h2>
-            
-            <form id="supportForm" onsubmit="sendMessageToChatGPT(event)">
-                <label for="userName">Имя:</label>
-                <input type="text" id="userName" placeholder="Анонимно" />
-
-                <label for="userEmail">Почта:</label>
-                <input type="email" id="userEmail" placeholder="example@mail.com" required />
-
-                <label for="userMessage">Ваш вопрос:</label>
-                <textarea id="userMessage" required></textarea>
-                
-                <button type="submit">Отправить</button>
-            </form>
-
-            <div id="responseArea"></div>
+    <!-- Основное содержимое сайта -->
+    <div id="main-content" class="hidden">
+        <h1>Добро пожаловать в PixWave Studio</h1>
+        <p>Мы создаём уникальные и качественные сайты, которые помогают вашему бизнесу расти и привлекать клиентов.</p>
+        
+        <!-- Преимущества -->
+        <div class="advantages">
+            <div class="advantage-card">
+                <h3>Индивидуальный подход</h3>
+                <p>Каждый сайт создаётся с учётом уникальных потребностей клиента.</p>
+            </div>
+            <div class="advantage-card">
+                <h3>Современный дизайн</h3>
+                <p>Используем новейшие технологии и тренды в веб-дизайне.</p>
+            </div>
+            <div class="advantage-card">
+                <h3>Оптимизация под SEO</h3>
+                <p>Ваш сайт будет легко находиться в поисковых системах.</p>
+            </div>
         </div>
+
+        <!-- Кнопка -->
+        <button class="glass-button">Заказать сайт</button>
     </div>
 
     <script src="script.js"></script>
