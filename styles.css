@@ -1,163 +1,96 @@
-/* Градиентный фон */
-body {
+/* Основные стили */
+* {
     margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #ffcf7d, #ff8c81, #ff65a3);
-    background-size: 300% 300%;
-    animation: gradientAnimation 8s ease infinite;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
-/* Анимация градиента */
-@keyframes gradientAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Начальный экран */
-.intro-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #ffcf7d, #ff8c81, #ff65a3);
-    background-size: 300% 300%;
-    animation: gradientAnimation 8s ease infinite;
-    z-index: 10;
-    opacity: 1;
-    transition: opacity 1.5s ease-in-out;
-}
-
-.intro-title {
-    font-size: 3em;
-    color: #ffffff;
-    opacity: 0;
-    animation: fadeIn 2s ease-in-out forwards, fadeOut 2s 3s ease-in-out forwards;
-}
-
-/* Анимации для заголовка */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-/* Основной контент */
-.content {
-    text-align: center;
-    color: #ffffff;
-    opacity: 0;
-    animation: contentFadeIn 1.5s 5s forwards;
-}
-
-@keyframes contentFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
-
-/* Кнопки в стиле гласс-морфизма */
-.glass-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border-radius: 12px;
-    font-size: 18px;
-    border: none;
-    cursor: pointer;
+body {
+    background-color: #000;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Прелоадер */
+#preloader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #000;
+}
+
+#logo {
+    width: 150px;
+    opacity: 0;
+    animation: fadeIn 2s forwards, scaleUp 2s forwards;
+}
+
+/* Основное содержимое */
+#main-content {
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.hidden {
+    display: none;
+}
+
+.advantages {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.advantage-card {
+    padding: 20px;
+    border-radius: 15px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Глассморфизм для кнопки */
+.glass-button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .glass-button:hover {
-    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
-/* Кнопка поддержки */
-.support-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #ff8c81;
-    color: white;
-    font-size: 1.5em;
-    padding: 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s;
+/* Анимации */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
-.support-icon:hover {
-    transform: scale(1.1);
-}
-
-/* Модальное окно */
-.support-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    justify-content: center;
-    align-items: center;
-}
-
-/* Содержимое модального окна */
-.support-modal-content.glass-form {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border-radius: 16px;
-    padding: 30px;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    color: #333;
-    text-align: center;
-    position: relative;
-    color: #fff;
-}
-
-/* Закрытие окна */
-.close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-/* Поля формы */
-.support-modal-content input,
-.support-modal-content textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-size: 16px;
-    outline: none;
+@keyframes scaleUp {
+    0% {
+        transform: scale(0.5);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
