@@ -1,46 +1,62 @@
-/* Основные стили */
+/* Общие стили */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Фон и базовые стили */
 body {
-    background-color: #000;
+    background: #0a0a0a;
     color: #fff;
-    overflow: hidden;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Анимация градиентных точек на фоне */
+body::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, #0ff, transparent) 0 0 / 20px 20px;
+    opacity: 0.05;
+    z-index: -1;
+    animation: gradient-dots 10s infinite linear;
+}
+
+@keyframes gradient-dots {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(20px, 20px); }
+    100% { transform: translate(0, 0); }
 }
 
 /* Прелоадер */
 #preloader {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-}
-
-#preloader-logo {
-    width: 150px;
-    z-index: 1001;
-    animation: fadeIn 2s forwards, scaleUp 2s forwards;
+    z-index: 9999;
 }
 
 #blur-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(20px);
-    z-index: 1000;
-    transition: backdrop-filter 1s ease;
+    inset: 0;
+    backdrop-filter: blur(15px);
+}
+
+#preloader-logo {
+    width: 150px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Анимация исчезновения прелоадера */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
 
 /* Навигационная панель */
@@ -48,127 +64,156 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    padding: 10px 20px;
+    padding: 20px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background: rgba(0, 0, 0, 0.7);
-    z-index: 10;
-    color: white;
+    backdrop-filter: blur(10px);
+    z-index: 1000;
 }
 
 .header-logo {
-    width: 50px;
-    cursor: pointer;
-    margin-right: auto;
+    height: 40px;
 }
 
 nav a {
-    margin: 0 15px;
-    color: #fff;
+    color: #0ff;
     text-decoration: none;
+    font-size: 1.1rem;
+    margin: 0 15px;
     transition: color 0.3s;
 }
 
 nav a:hover {
-    color: #0ff;
+    color: #fff;
 }
 
-/* Заголовок секции */
-.section-title {
+/* Раздел услуг */
+#services {
+    padding: 100px 0;
     text-align: center;
-    font-size: 2rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
     color: #0ff;
-    background: linear-gradient(90deg, #0ff, #00f);
+    background: linear-gradient(90deg, #00ffcc, #0033ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
-/* Основное содержимое */
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    opacity: 0;
-    transition: opacity 1s;
-}
-
+/* Большой овал */
 .main-oval {
     position: relative;
     width: 90%;
+    max-width: 1200px;
     height: 400px;
+    margin: 0 auto;
     border-radius: 100px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
-    border: 3px solid transparent;
-    background-clip: padding-box;
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-    border-image: radial-gradient(circle, #00f, #0f0) 1;
+}
+
+.main-oval::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 100px;
+    background: radial-gradient(circle, #00ffcc 0%, #0033ff 100%);
+    opacity: 0.2;
 }
 
 /* Карточки услуг */
 .service-card {
     position: absolute;
-    width: 200px;
+    width: 220px;
     padding: 20px;
     border-radius: 20px;
-    background: rgba(0, 255, 0, 0.15);
-    backdrop-filter: blur(10px);
-    text-align: center;
+    background: rgba(0, 255, 0, 0.2);
+    backdrop-filter: blur(20px);
     color: #fff;
-    transition: all 0.3s;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.price {
-    color: #0ff;
-    background: linear-gradient(90deg, #0ff, #0f0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
-    animation: glow 2s infinite alternate;
+.service-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
 }
+
+/* Заголовок и описание услуги */
+.service-card h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #0ff;
+}
+
+.service-card p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* Цена услуги */
+.price {
+    font-size: 1.1rem;
+    color: #00ffcc;
+    text-shadow: 0 0 10px #00ffcc;
+}
+
+/* Кнопка добавления в корзину */
 .neon-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    border: 2px solid transparent;
-    border-radius: 20px;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
     color: #fff;
-    background: #111;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #0ff;
+    border-radius: 10px;
     cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-    animation: neon-glow 3s infinite;
+    transition: all 0.3s;
 }
 
 .neon-button:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+    box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
 }
 
-/* Анимация неонового свечения и текста */
-@keyframes glow {
-    0% { text-shadow: 0 0 10px #0ff, 0 0 20px #0f0; }
-    100% { text-shadow: 0 0 20px #0ff, 0 0 30px #0f0; }
+/* Плавный скролл */
+html {
+    scroll-behavior: smooth;
 }
 
-/* Фоновая анимация точек */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-                radial-gradient(circle, rgba(0, 0, 255, 0.1) 1px, transparent 1px);
-    background-size: 10px 10px;
-    background-position: 0 0, 5px 5px;
-    animation: moveDots 20s linear infinite;
-    z-index: -1;
+/* Раздел "О нас" */
+#about {
+    padding: 50px 0;
+    text-align: center;
 }
 
-@keyframes moveDots {
-    from { background-position: 0 0, 5px 5px; }
-    to { background-position: -10px -10px, -5px -5px; }
+#about h2 {
+    font-size: 2rem;
+    color: #0ff;
+}
+
+#about p {
+    font-size: 1.1rem;
+    color: #ddd;
+}
+
+/* Раздел "Корзина" */
+#cart {
+    padding: 50px 0;
+    text-align: center;
+}
+
+#cart h2 {
+    font-size: 2rem;
+    color: #0ff;
+}
+
+#cart p {
+    font-size: 1.1rem;
+    color: #ddd;
 }
