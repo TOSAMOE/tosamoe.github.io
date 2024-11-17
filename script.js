@@ -1,26 +1,19 @@
-// Эффект кастомного курсора
-const cursor = document.querySelector('.custom-cursor');
-
+// Кастомный курсор
+const cursor = document.querySelector('.cursor');
 document.addEventListener('mousemove', (e) => {
-  cursor.style.left = `${e.pageX}px`;
-  cursor.style.top = `${e.pageY}px`;
+    cursor.style.top = `${e.clientY}px`;
+    cursor.style.left = `${e.clientX}px`;
 });
-
-// Глитч-эффект
-const glitchText = document.getElementById('logo-text');
-setInterval(() => {
-  glitchText.classList.toggle('glitch');
-}, 500);
 
 // Анимация появления элементов при скролле
-const revealElements = document.querySelectorAll('.reveal');
+const fadeInElements = document.querySelectorAll('.fade-in');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = 1;
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, { threshold: 0.1 });
 
-window.addEventListener('scroll', () => {
-  revealElements.forEach((el) => {
-    const windowHeight = window.innerHeight;
-    const elementTop = el.getBoundingClientRect().top;
-    if (elementTop < windowHeight - 100) {
-      el.classList.add('active');
-    }
-  });
-});
+fadeInElements.forEach(el => observer.observe(el));
