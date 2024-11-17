@@ -1,198 +1,121 @@
-/* Общие стили */
+/* Основные стили */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Фон и базовые стили */
 body {
-    background: #0a0a0a;
-    color: #fff;
-    overflow-x: hidden;
-    position: relative;
-    background-image: linear-gradient(130deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1)),
-                      linear-gradient(50deg, rgba(0, 0, 255, 0.1), rgba(0, 255, 0, 0.1));
-    background-blend-mode: overlay;
+  background: #0d0d0d;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
 }
 
-/* Прелоадер */
-#preloader {
-    position: fixed;
-    inset: 0;
-    background: rgba(10, 10, 10, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+/* Курсор */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #00ffff;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
 }
 
-#blur-overlay {
-    position: absolute;
-    inset: 0;
-    backdrop-filter: blur(15px);
+/* Глитч-эффект текста */
+.glitch {
+  font-size: 4rem;
+  color: #00ffff;
+  position: relative;
+  text-align: center;
+  margin-top: 10vh;
+  animation: glitch 2s infinite;
 }
 
-#preloader-logo {
-    width: 150px;
+@keyframes glitch {
+  0% {
+    text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff;
+  }
+  50% {
+    text-shadow: -2px -2px #ff00ff, 2px 2px #00ffff;
+  }
+  100% {
+    text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff;
+  }
 }
 
-/* Навигационная панель */
+/* Стили шторки */
 header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem 2rem;
+  z-index: 10;
 }
 
-.header-logo {
-    height: 40px;
+nav ul {
+  display: flex;
+  justify-content: space-around;
 }
 
 nav a {
-    color: #0ff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    margin: 0 15px;
-    transition: color 0.3s;
+  color: #00ffff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: color 0.3s;
 }
 
 nav a:hover {
-    color: #fff;
+  color: #ff00ff;
 }
 
-/* Раздел услуг */
+/* Секции */
+#banner {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #services {
-    padding: 100px 0;
-    text-align: center;
+  padding: 5rem 2rem;
+  text-align: center;
 }
 
-.section-title {
-    font-size: 2.5rem;
-    color: #0ff;
-    background: linear-gradient(90deg, #00ffcc, #0033ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0px 0px 10px #00ffcc;
-    margin-bottom: 40px;
+.service-list {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
-/* Большой овал */
-.main-oval {
-    position: relative;
-    width: 90%;
-    max-width: 1200px;
-    height: 400px;
-    margin: 0 auto;
-    border-radius: 100px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 20px;
+.service-item {
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 200px;
+  margin: 1rem;
+  color: #00ff00;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/* Карточки услуг */
-.service-card {
-    width: 180px;
-    padding: 20px;
-    border-radius: 20px;
-    background: rgba(0, 255, 0, 0.2);
-    backdrop-filter: blur(20px);
-    color: #fff;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 10px;
+.service-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #00ff00;
 }
 
-/* Заголовки услуг */
-.service-card h2 {
-    font-size: 1.2rem;
-    color: #00ffff;
-    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+/* Анимация появления элементов при скролле */
+.reveal {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 1s, transform 1s;
 }
 
-/* Градиент цен */
-.service-card .price {
-    font-size: 1.5rem;
-    background: linear-gradient(90deg, #00ffcc, #0033ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0px 0px 10px #00ffcc;
-}
-
-/* Кнопка добавления в корзину */
-.neon-button {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid #0ff;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.neon-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px #0ff, 0 0 30px #0ff;
-}
-
-/* Плавный скролл */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Раздел "О нас" */
-#about {
-    padding: 50px 0;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    margin-top: 50px;
-}
-
-#about h2 {
-    font-size: 2rem;
-    color: #0ff;
-}
-
-#about p {
-    font-size: 1.1rem;
-    color: #ddd;
-    font-family: 'Arial', sans-serif;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Раздел "Корзина" */
-#cart {
-    padding: 50px 0;
-    text-align: center;
-}
-
-#cart h2 {
-    font-size: 2rem;
-    color: #0ff;
-}
-
-#cart p {
-    font-size: 1.1rem;
-    color: #ddd;
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
 }
